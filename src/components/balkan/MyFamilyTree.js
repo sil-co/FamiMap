@@ -81,7 +81,7 @@ const MyFamilyTree = (props) => {
     family.load(
       nodes
     );
-  }, [])
+  }, [divRef])
 
 
   return (
