@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import FamilyTree from '@balkangraph/familytree.js';
 import nodes from './nodes';
 
 
 const MyFamilyTree = (props) => {
+
+  const [familyNodes, setFamilyNodes] = useState(nodes);
 
   const divRef = React.createRef();
 
@@ -78,11 +80,30 @@ const MyFamilyTree = (props) => {
       }
     });
 
-    family.load(
-      nodes
-    );
-  }, [divRef])
+    console.log(family);
+    console.log(nodes);
+    console.log(familyNodes)
+    family.addParentNode(1, "mid" , {id: 0, name: "Amber McKenzie's mother", gender: "female", });
 
+    // function addParentNode2() {
+    //   family.addParentNode.call(this);
+    // }
+
+    family.load(
+      familyNodes
+    );
+
+    }, [divRef, familyNodes])
+
+    // const addNode = useCallback(() => {
+    //   setFamilyNodes(() => [...familyNodes,{
+    //     id: 10, mid: 7, fid: 6, gender: 'male', name: 'Drew', bdate: '1993-02-04', ddate: '1998-02-04'
+    //   } ])
+    // }, [familyNodes])
+
+    // useEffect(() => {
+    //   addNode();
+    // },[])
 
   return (
     <div style={{height: '100%'}}>

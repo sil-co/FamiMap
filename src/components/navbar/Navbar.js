@@ -18,7 +18,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import {useNavigate} from 'react-router-dom';
 
-const pages = ['Share', 'Pricing', 'Blog'];
+const pages = ['Share', 'Add', 'Remove'];
 const settings = ['Profile', 'Account', 'Dashboard'];
 
 const ResponsiveAppBar = () => {

@@ -1,7 +1,10 @@
 import RoutesList from './components/routes/RoutesList';
 import firebase from 'firebase/app';
-import Navbar from './components/navbar/Navbar';
+import { requirePropFactory } from '@mui/material';
+// import Navbar from './components/navbar/Navbar';
 // import Nodes from './components/balkan/Nodes';
+
+require('firebase/firestore');
 
 function App(props) {
 
@@ -20,7 +23,6 @@ function App(props) {
 
   return (
     <>
-      {/* <Navbar /> */}
       <RoutesList />
     </>
 
