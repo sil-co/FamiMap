@@ -2,7 +2,8 @@
 
 const nodes = [
   {
-    id: 1, pids: [3], gender: 'male', photo: 'https://cdn.balkan.app/shared/m60/2.jpg',
+    id: 1,
+    pids: [3], gender: 'male', photo: 'https://cdn.balkan.app/shared/m60/2.jpg',
     name: 'Zeph Daniels', bdate: '1954-09-29', ddate: '1990-01-02'
   },
   {

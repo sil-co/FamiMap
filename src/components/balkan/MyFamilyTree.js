@@ -83,24 +83,36 @@ const MyFamilyTree = (props) => {
     console.log(family);
     console.log(nodes);
     console.log(familyNodes)
-    family.addParentNode(1, "mid" , {id: 0, name: "Amber McKenzie's mother", gender: "female", });
 
-    // function addParentNode2() {
-    //   family.addParentNode.call(this);
-    // }
+    // 継承できない。継承した場合、継承先に書いてあるthisを使う関数が処理できない(failyが参照されない)
+    // よって、継承はprototype継承を使うことにした。
+    // const addParentNode2 = function (e, t, i, r, a) {
+    //     family.addParentNode.call(this,e, t, i, r, a);
+    //   };
+    // addParentNode2(1, "mid" , {id: 0, name: "Amber McKenzie's mother", gender: "female", });
+
+
+    FamilyTree.prototype.addParentNode3 = function(e, t, i, r, a) {
+      family.addParentNode.call(this,e, t, i, r, a);
+
+    };
 
     family.load(
       familyNodes
-    );
+      );
+
+    // family.addParentNode3(1, "mid" , {id: 0, name: "Amber McKenzie's mother", gender: "female", });
 
     }, [divRef, familyNodes])
 
+    // familyNodesをsetFamilyNodes(useState)を使って変更していき、nodeを追加していこうと思ったが、
+    // なぜか無限ループに陥ってしまう。onClick={() => {addNode()}}とすることで解決できそうではあるが、
+    // 継承を使って、add関数自体を変更する
     // const addNode = useCallback(() => {
     //   setFamilyNodes(() => [...familyNodes,{
     //     id: 10, mid: 7, fid: 6, gender: 'male', name: 'Drew', bdate: '1993-02-04', ddate: '1998-02-04'
     //   } ])
     // }, [familyNodes])
-
     // useEffect(() => {
     //   addNode();
     // },[])
