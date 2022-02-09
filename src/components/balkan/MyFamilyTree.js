@@ -1,9 +1,10 @@
-import React, { useEffect, useState,useCallback } from 'react';
-import FamilyTree from '@balkangraph/familytree.js';
+import React, { useEffect, useState, useCallback } from 'react';
+import FamilyTree from './familytree';
 import nodes from './nodes';
 
 
 const MyFamilyTree = (props) => {
+
 
   const [familyNodes, setFamilyNodes] = useState(nodes);
 
@@ -82,7 +83,7 @@ const MyFamilyTree = (props) => {
 
     console.log(family);
     console.log(nodes);
-    console.log(familyNodes)
+    // console.log(familyNodes)
 
     // 継承できない。継承した場合、継承先に書いてあるthisを使う関数が処理できない(failyが参照されない)
     // よって、継承はprototype継承を使うことにした。
@@ -91,19 +92,24 @@ const MyFamilyTree = (props) => {
     //   };
     // addParentNode2(1, "mid" , {id: 0, name: "Amber McKenzie's mother", gender: "female", });
 
-
-    FamilyTree.prototype.addParentNode3 = function(e, t, i, r, a) {
-      family.addParentNode.call(this,e, t, i, r, a);
-
-    };
+    // 再帰関数 無限ループになるだけ。 familytree.js本体に機能を追加する
+    // let roopCtrl = 0;
+    // FamilyTree.prototype.addParentNode = function(e, t, i, r, a) {
+    //   console.log(roopCtrl);
+    //   if (roopCtrl < 1) {
+    //     roopCtrl += 1;
+    //     FamilyTree.prototype.addParentNode.call(this,e, t, i, r, a);
+    //     console.log('Editted addParentNode is called');
+    //   }
+    // };
 
     family.load(
-      familyNodes
-      );
+      nodes
+    );
 
     // family.addParentNode3(1, "mid" , {id: 0, name: "Amber McKenzie's mother", gender: "female", });
 
-    }, [divRef, familyNodes])
+    }, [divRef])
 
     // familyNodesをsetFamilyNodes(useState)を使って変更していき、nodeを追加していこうと思ったが、
     // なぜか無限ループに陥ってしまう。onClick={() => {addNode()}}とすることで解決できそうではあるが、
