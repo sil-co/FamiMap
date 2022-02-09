@@ -10,6 +10,8 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID
 };
 
-if (firebase.app.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-}
+// if (firebase.app.length === 0) {
+firebase.initializeApp(firebaseConfig);
+// }
+
+export const auth = firebase.auth();

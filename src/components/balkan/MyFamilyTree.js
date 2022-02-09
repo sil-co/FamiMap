@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import FamilyTree from './familytree';
+import {FamilyTree} from './familytree';
 import nodes from './nodes';
 
 
 const MyFamilyTree = (props) => {
-
 
   const [familyNodes, setFamilyNodes] = useState(nodes);
 
@@ -123,6 +122,7 @@ const MyFamilyTree = (props) => {
     //   addNode();
     // },[])
 
+  
   return (
     <div style={{height: '100%'}}>
       <div id="tree" ref={divRef}></div>

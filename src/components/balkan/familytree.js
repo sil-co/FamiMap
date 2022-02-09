@@ -6,7 +6,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-var FamilyTree = function (e, t) {
+export let FamilyTree = function (e, t) {
   var i = this;
   if (("string" == typeof e || e instanceof String) && (e = document.querySelector(e)), this.element = e, this.config = FamilyTree.mergeDeep(FamilyTree._defaultConfig(t), t), this._layoutConfigs = {
       base: {
@@ -65,6 +65,7 @@ var FamilyTree = function (e, t) {
     i.isVisible = e, !1 !== FamilyTree.events.publish("visibility-change", [i]) && i.isVisible && (i._initialized ? i._draw(!1, FamilyTree.action.update) : (i._setInitialSizeIfNotSet(), i._draw(!1, FamilyTree.action.init)))
   })))
 };
+
 FamilyTree._defaultConfig = function (e) {
   return {
     interactive: !0,
@@ -170,18 +171,24 @@ FamilyTree._defaultConfig = function (e) {
       elements: []
     }
   }
-}, FamilyTree.prototype.load = function (e) {
+};
+FamilyTree.prototype.load = function (e) {
   return this.config.nodes = e, this._draw(!1, FamilyTree.action.init), this
-}, FamilyTree.prototype.loadXML = function (e) {
+};
+FamilyTree.prototype.loadXML = function (e) {
   var t = FamilyTree._xml2json(e);
   return this.load(t)
-}, FamilyTree.prototype.getXML = function () {
+};
+FamilyTree.prototype.getXML = function () {
   return FamilyTree._json2xml(this.config.nodes)
-}, FamilyTree.prototype.on = function (e, t) {
+};
+FamilyTree.prototype.on = function (e, t) {
   return FamilyTree.events.on(e, t, this._event_id), this
-}, FamilyTree.prototype.draw = function (e, t, i) {
+};
+FamilyTree.prototype.draw = function (e, t, i) {
   null == e && (e = FamilyTree.action.update), this._draw(!1, e, t, i)
-}, FamilyTree.prototype._draw = function (e, t, i, r) {
+};
+FamilyTree.prototype._draw = function (e, t, i, r) {
   var a = this;
   if (this.isVisible) {
     this._hideBeforeAnimationCompleted = !1;
@@ -260,20 +267,27 @@ FamilyTree._defaultConfig = function (e) {
       FamilyTree.events.publish("ready", [a, e])
     }))
   }
-}, FamilyTree.prototype._setInitialSizeIfNotSet = function () {
+};
+FamilyTree.prototype._setInitialSizeIfNotSet = function () {
   this.element.style.overflow = "hidden", this.element.style.position = "relative", 0 == this.element.offsetHeight && (this.element.style.height = "100%", 0 == this.element.offsetHeight && (this.element.style.height = "700px")), 0 == this.element.offsetWidth && (this.element.style.width = "100%", 0 == this.element.offsetWidth && (this.element.style.width = "700px"))
-}, FamilyTree.prototype.width = function () {
+};
+FamilyTree.prototype.width = function () {
   return this.element.offsetWidth
-}, FamilyTree.prototype.height = function () {
+};
+FamilyTree.prototype.height = function () {
   return this.element.offsetHeight
-}, FamilyTree.prototype.getViewBox = function () {
+};
+FamilyTree.prototype.getViewBox = function () {
   var e = this.getSvg();
   return FamilyTree._getViewBox(e)
-}, FamilyTree.prototype.setViewBox = function (e) {
+};
+FamilyTree.prototype.setViewBox = function (e) {
   this.getSvg().setAttribute("viewBox", e.toString())
-}, FamilyTree.prototype.getScale = function (e) {
+};
+FamilyTree.prototype.getScale = function (e) {
   return e || (e = this.getViewBox()), FamilyTree.getScale(e, this.width(), this.height(), this.config.scaleInitial, this.config.scaleMax, this.config.scaleMin)
-}, FamilyTree.prototype.ripple = function (e, t, i) {
+};
+FamilyTree.prototype.ripple = function (e, t, i) {
   var r = this.getNode(e);
   if (null != r) {
     var a = this.getNodeElement(e);
@@ -311,7 +325,8 @@ FamilyTree._defaultConfig = function (e) {
       }))
     }
   }
-}, FamilyTree.prototype.center = function (e, t, i) {
+};
+FamilyTree.prototype.center = function (e, t, i) {
   var r, a, n = e,
     o = !0,
     l = !0;
@@ -327,22 +342,29 @@ FamilyTree._defaultConfig = function (e) {
     id: e,
     options: s
   }, i)
-}, FamilyTree.prototype.fit = function (e) {
+};
+FamilyTree.prototype.fit = function (e) {
   this.config.scaleInitial = FamilyTree.match.boundary, this._draw(!0, FamilyTree.action.init, {
     method: "fit"
   }, e)
-}, FamilyTree.prototype.toggleFullScreen = function () {
+};
+FamilyTree.prototype.toggleFullScreen = function () {
   var e = document.querySelector("[" + FamilyTree.attr.tlbr + "r='fullScreen']");
   document.fullscreenElement == this.element || document.webkitFullscreenElement == this.element || document.mozFullScreenElement == this.element || document.msFullscreenElement == this.element ? (document.exitFullscreen ? document.exitFullscreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitExitFullscreen ? document.webkitExitFullscreen() : document.msExitFullscreen && document.msExitFullscreen(), e && (e.innerHTML = FamilyTree.toolbarUI.openFullScreenIcon)) : (this.element.requestFullscreen ? this.element.requestFullscreen() : this.element.mozRequestFullScreen ? this.element.mozRequestFullScreen() : this.element.webkitRequestFullscreen ? this.element.webkitRequestFullscreen() : this.element.msRequestFullscreen && this.element.msRequestFullscreen(), e && (e.innerHTML = FamilyTree.toolbarUI.closeFullScreenIcon))
-}, FamilyTree.prototype.getNode = function (e) {
+};
+FamilyTree.prototype.getNode = function (e) {
   return this.nodes[e]
-}, FamilyTree.prototype.setLayout = function (e, t) {
+};
+FamilyTree.prototype.setLayout = function (e, t) {
   t || (t = "base"), this._layoutConfigs[t].layout = e, this._draw(!1, FamilyTree.action.update)
-}, FamilyTree.prototype.setOrientation = function (e, t) {
+};
+FamilyTree.prototype.setOrientation = function (e, t) {
   t || (t = "base"), this._layoutConfigs[t].orientation = e, this._draw(!1, FamilyTree.action.update)
-}, FamilyTree.prototype.search = function (e, t, i) {
+};
+FamilyTree.prototype.search = function (e, t, i) {
   return FamilyTree.isNEU(t) && (t = this.config.searchFields), FamilyTree.isNEU(i) && (i = t), FamilyTree._search.search(this.config.nodes, e, t, i, this.config.searchDisplayField, this.config.searchFieldsWeight)
-}, FamilyTree.prototype._hideBeforeAnimation = function (e) {
+};
+FamilyTree.prototype._hideBeforeAnimation = function (e) {
   if (1 != this._hideBeforeAnimationCompleted && !(e && e < FamilyTree.ANIM_THRESHOLD)) {
     var t = this.element.getElementsByTagName("text");
     if (t.length > FamilyTree.TEXT_THRESHOLD)
@@ -361,7 +383,8 @@ FamilyTree._defaultConfig = function (e) {
       for (i = 0; i < o.length; i++) o[i].style.display = "none";
     this._hideBeforeAnimationCompleted = !0
   }
-}, FamilyTree.prototype._showAfterAnimation = function () {
+};
+FamilyTree.prototype._showAfterAnimation = function () {
   for (var e = this.element.getElementsByTagName("text"), t = 0; t < e.length; t++) e[t].style.display = "";
   var i = this.element.getElementsByTagName("image");
   for (t = 0; t < i.length; t++) i[t].style.display = "";
@@ -372,32 +395,38 @@ FamilyTree._defaultConfig = function (e) {
   var n = this.element.querySelectorAll("[" + FamilyTree.attr.control_up_id + "]");
   for (t = 0; t < n.length; t++) n[t].style.display = "";
   this._hideBeforeAnimationCompleted = !1
-}, FamilyTree.prototype.isChild = function (e, t) {
+};
+FamilyTree.prototype.isChild = function (e, t) {
   for (var i = this.getNode(t); i;) {
     if (i.id == e) return !0;
     i = i.parent ? i.parent : i.stParent
   }
   return !1
-}, FamilyTree.prototype.getCollapsedIds = function (e) {
+};
+FamilyTree.prototype.getCollapsedIds = function (e) {
   for (var t = [], i = 0; i < e.childrenIds.length; i++) {
     var r = this.getNode(e.childrenIds[i]);
     1 == r.collapsed && t.push(r.id)
   }
   return t
-}, FamilyTree.prototype.stateToUrl = function () {
+};
+FamilyTree.prototype.stateToUrl = function () {
   if (this.manager.state) {
     var e = {};
     return e.exp = this.manager.state.exp.join("*"), e.min = this.manager.state.min.join("*"), e.adjustify = this.manager.state.adjustify.x + "*" + this.manager.state.adjustify.y, e.scale = this.manager.state.scale, e.y = this.manager.state.x, e.x = this.manager.state.y, new URLSearchParams(e).toString()
   }
   return ""
-}, FamilyTree.prototype.generateId = function () {
+};
+FamilyTree.prototype.generateId = function () {
   for (;;) {
     var e = "_" + ("0000" + (Math.random() * Math.pow(36, 4) | 0).toString(36)).slice(-4);
     if (!this.nodes.hasOwnProperty(e)) return e
   }
-}, FamilyTree.prototype._nodeHasHiddenParent = function (e) {
+};
+FamilyTree.prototype._nodeHasHiddenParent = function (e) {
   return !e.parent && !FamilyTree.isNEU(e.pid) && this.getNode(e.pid)
-}, FamilyTree.prototype.destroy = function () {
+};
+FamilyTree.prototype.destroy = function () {
   this._removeEvent(window, "resize"), FamilyTree.events.removeForEventId(this._event_id), this.element.innerHTML = null
 }, FamilyTree.__defaultConfig = FamilyTree._defaultConfig, FamilyTree._defaultConfig = function (e) {
   var t = FamilyTree.__defaultConfig();
@@ -416,7 +445,8 @@ FamilyTree._defaultConfig = function (e) {
   }, t.tags.female = {
     template: t.template + "_female"
   }), t
-}, FamilyTree.prototype.getRecentRootsByNodeId = function (e) {
+};
+FamilyTree.prototype.getRecentRootsByNodeId = function (e) {
   this.recentRoots || (this.recentRoots = []);
   var t = this.recentRoots,
     i = this.getNode(e);
@@ -425,16 +455,20 @@ FamilyTree._defaultConfig = function (e) {
       a = t.indexOf(i);
     return -1 == r ? 1e3 : -1 == a ? -1e3 : r - a
   })), i.rids) : []
-}, FamilyTree.prototype._nodeHasHiddenParent = function (e) {
+};
+FamilyTree.prototype._nodeHasHiddenParent = function (e) {
   return !(e.parent || FamilyTree.isNEU(e.pid) || !this.getNode(e.pid)) || (!(!e.isPartner || FamilyTree.isNEU(e.mid) || !this.getNode(e.mid)) || (!(!e.isPartner || FamilyTree.isNEU(e.fid) || !this.getNode(e.fid)) || !!(e.isPartner && e.pids.length > 1)))
-}, FamilyTree.prototype._center = FamilyTree.prototype.center, FamilyTree.prototype.center = function (e, t, i) {
+};
+FamilyTree.prototype._center = FamilyTree.prototype.center, FamilyTree.prototype.center = function (e, t, i) {
   var r = this.getRecentRootsByNodeId(e);
   Array.isArray(this.config.roots) || (roots = []), FamilyTree._changeRootOption(this.config.roots, r, this.manager.rootList), this._center(e, t, i)
-}, FamilyTree.prototype.onUpdateNode = function (e) {
+};
+FamilyTree.prototype.onUpdateNode = function (e) {
   return this.on("update", (function (t, i) {
     return e.call(t, i)
   }))
-}, FamilyTree.prototype.onRemoveNode = null, FamilyTree.prototype.onAddNode = null, FamilyTree.localStorage = {}, FamilyTree.localStorage.getItem = function (e) {
+};
+FamilyTree.prototype.onRemoveNode = null, FamilyTree.prototype.onAddNode = null, FamilyTree.localStorage = {}, FamilyTree.localStorage.getItem = function (e) {
   var t = localStorage.getItem("to_date");
   if (t) {
     if ((t = new Date(t)) < new Date) {
@@ -452,14 +486,16 @@ FamilyTree._defaultConfig = function (e) {
   } catch (e) {
     e.code == e.QUOTA_EXCEEDED_ERR ? (console.warn("Local storage quota exceeded"), localStorage.clear()) : (console.error("Local storage error code:" + e.code), console.error(e))
   }
-}, FamilyTree.prototype._canUpdateLink = function (e, t) {
+};
+FamilyTree.prototype._canUpdateLink = function (e, t) {
   if (null == t || null == t) return !1;
   if (null == e || null == e) return !1;
   if (e == t) return !1;
   var i = this.getNode(t),
     r = this.getNode(e);
   return !(i && r && (i.isPartner || i.hasPartners && r.isAssistant || i.hasAssistants && r.isPartner)) && !this.isChild(e, t)
-}, FamilyTree.prototype.updateNode = function (e, t, i) {
+};
+FamilyTree.prototype.updateNode = function (e, t, i) {
   var r = this,
     a = this.get(e.id);
   if (!0 === i && !1 === FamilyTree.events.publish("update", [this, a, e])) return !1;
@@ -471,14 +507,16 @@ FamilyTree._defaultConfig = function (e) {
   }, (function () {
     r.ripple(e.id), t && t(), FamilyTree.events.publish("updated", [r, a, e])
   }))
-}, FamilyTree.prototype.update = function (e) {
+};
+FamilyTree.prototype.update = function (e) {
   for (var t = 0; t < this.config.nodes.length; t++)
     if (this.config.nodes[t].id == e.id) {
       this.config.nodes[t] = e;
       break
     }
   return this
-}, FamilyTree.prototype.removeNode = function (e, t, i) {
+};
+FamilyTree.prototype.removeNode = function (e, t, i) {
   var r = this;
   if (!this.canRemove(e)) return !1;
   var a = this._getNewPidsAndStpidsForIds(e);
@@ -486,12 +524,14 @@ FamilyTree._defaultConfig = function (e) {
   return this.remove(e), this._draw(!1, FamilyTree.action.update, null, (function () {
     r.config.sticky && FamilyTree._moveToBoundaryArea(r.getSvg(), r.getViewBox(), r.response.boundary), t && t(), FamilyTree.events.publish("removed", [r, e, a])
   })), !0
-}, FamilyTree.prototype.remove = function (e) {
+};
+FamilyTree.prototype.remove = function (e) {
   var t = this.get(e);
   if (t)
     for (var i = this.config.nodes.length - 1; i >= 0; i--) this.config.nodes[i].pid != e && this.config.nodes[i].stpid != e || (this.config.nodes[i].pid = t.pid, this.config.nodes[i].stpid = t.stpid), this.config.nodes[i].id == e && this.config.nodes.splice(i, 1);
   return this
-}, FamilyTree.prototype._getNewPidsAndStpidsForIds = function (e) {
+};
+FamilyTree.prototype._getNewPidsAndStpidsForIds = function (e) {
   var t = this.get(e),
     i = {},
     r = {};
@@ -501,7 +541,8 @@ FamilyTree._defaultConfig = function (e) {
     newPidsForIds: i,
     newStpidsForIds: r
   }
-}, FamilyTree.prototype.addNode = function (e, t, i) {
+};
+FamilyTree.prototype.addNode = function (e, t, i) {
   var r = this;
   if (!0 === i && !1 === FamilyTree.events.publish("add", [this, e])) return !1;
   this.add(e), r._draw(!1, FamilyTree.action.insert, {
@@ -510,20 +551,25 @@ FamilyTree._defaultConfig = function (e) {
   }, (function () {
     r.ripple(e.id), t && t(), FamilyTree.events.publish("added", [r, e.id])
   })), FamilyTree.events.publish("adding", [r, e.id])
-}, FamilyTree.prototype.add = function (e) {
+};
+FamilyTree.prototype.add = function (e) {
   return null == e.id && console.error("Call addNode without id"), this.config.nodes.push(e), this
-}, FamilyTree.prototype._get = function (e) {
+};
+FamilyTree.prototype._get = function (e) {
   for (var t = 0; t < this.config.nodes.length; t++)
     if (this.config.nodes[t].id == e) return this.config.nodes[t];
   return null
-}, FamilyTree.prototype.get = function (e) {
+};
+FamilyTree.prototype.get = function (e) {
   for (var t = 0; t < this.config.nodes.length; t++)
     if (this.config.nodes[t].id == e) return JSON.parse(JSON.stringify(this.config.nodes[t]));
   return null
-}, FamilyTree.prototype.canRemove = function (e) {
+};
+FamilyTree.prototype.canRemove = function (e) {
   var t = this.getNode(e);
   return !!t && (!t.hasPartners && !t.hasAssistants)
-}, FamilyTree.prototype.addChildNode = function (e, t, i) {
+};
+FamilyTree.prototype.addChildNode = function (e, t, i) {
   this.hideTreeMenu(!1);
   var r = this;
   if (!e || FamilyTree.isNEU(e.mid) && FamilyTree.isNEU(e.fid)) console.error("addSonNode invalid data");
@@ -544,7 +590,8 @@ FamilyTree._defaultConfig = function (e) {
       })), FamilyTree.events.publish("updating", [r, a])
     }
   }
-}, FamilyTree.prototype.addChildAndPartnerNodes = function (e, t, i, r, a) {
+};
+FamilyTree.prototype.addChildAndPartnerNodes = function (e, t, i, r, a) {
   this.hideTreeMenu(!1);
   var n = this;
   if (!t || FamilyTree.isNEU(t.mid) && FamilyTree.isNEU(t.fid)) console.error("addChildAndPartnerNodes invalid childData");
@@ -569,7 +616,8 @@ FamilyTree._defaultConfig = function (e) {
       })), FamilyTree.events.publish("updating", [n, s])
     }
   } else console.error("addChildAndPartnerNodes invalid data")
-}, FamilyTree.prototype.addPartnerNode = function (e, t, i) {
+};
+FamilyTree.prototype.addPartnerNode = function (e, t, i) {
   this.hideTreeMenu(!1);
   var r = this;
   if (e && Array.isArray(e.pids) && 1 == e.pids.length) {
@@ -593,7 +641,8 @@ FamilyTree._defaultConfig = function (e) {
       })), FamilyTree.events.publish("updating", [r, n])
     }
   } else console.error("addPartnerNode invalid data")
-}, FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
+};
+FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
   console.log('addParentNode is called');
   console.log(`e : ${e}, t : ${t}, i : ${i}, r : ${r}, a : ${a} `);
   console.log(i);
@@ -662,10 +711,12 @@ FamilyTree._defaultConfig = function (e) {
     console.log(7);
     console.error("addParentNode invalid data");
   }
-}, FamilyTree.prototype.canRemove = function (e) {
+};
+FamilyTree.prototype.canRemove = function (e) {
   var t = this.getNode(e);
   return !!t && (!(t.pids.length > 1) && !(t.childrenIds.length > 0))
-}, FamilyTree.prototype.removeNode = function (e, t, i) {
+};
+FamilyTree.prototype.removeNode = function (e, t, i) {
   var r = this;
   if (this.canRemove(e)) {
     var a = this.getNode(e),
@@ -691,7 +742,8 @@ FamilyTree._defaultConfig = function (e) {
       r.config.sticky && FamilyTree._moveToBoundaryArea(r.getSvg(), r.getViewBox(), r.response.boundary), t && t(), FamilyTree.events.publish("updated", [r, c])
     })), FamilyTree.events.publish("updating", [r, c]))
   }
-}, FamilyTree.prototype.updateNode = function (e, t, i) {
+};
+FamilyTree.prototype.updateNode = function (e, t, i) {
   var r = this,
     a = this.getNode(e.id);
   e.pids || (e.pids = []);
@@ -715,7 +767,8 @@ FamilyTree._defaultConfig = function (e) {
   !1 !== this._fireUpdate_addUpdateRemove(d, i) && (this._draw(!1, FamilyTree.action.update, null, (function () {
     r.config.sticky && FamilyTree._moveToBoundaryArea(r.getSvg(), r.getViewBox(), r.response.boundary), t && t(), FamilyTree.events.publish("updated", [r, d])
   })), FamilyTree.events.publish("updating", [r, d]))
-}, FamilyTree.prototype._fireUpdate_addUpdateRemove = function (e, t) {
+};
+FamilyTree.prototype._fireUpdate_addUpdateRemove = function (e, t) {
   if (!0 === t && !1 === FamilyTree.events.publish("update", [this, e])) return !1;
   for (var i = 0; i < e.addNodesData.length; i++) this.add(e.addNodesData[i]);
   for (i = 0; i < e.updateNodesData.length; i++) this.update(e.updateNodesData[i]);
@@ -852,14 +905,16 @@ FamilyTree._defaultConfig = function (e) {
   return Math.exp(-2 * Math.pow(e, 2))
 }, void 0 === FamilyTree && (FamilyTree = {}), FamilyTree.prototype._attachInitEventHandlers = function (e) {
   this._addEvent(window, "resize", this._resizeHandler)
-}, FamilyTree.prototype._attachEventHandlers = function (e) {
+};
+FamilyTree.prototype._attachEventHandlers = function (e) {
   if (this.config.interactive) {
     e = this.getSvg();
     this.config.enableTouch || FamilyTree.isMobile() ? (this._addEvent(e, "touchstart", this._globalMouseDownHandler), this._addEvent(e, "touchend", this._globalClickHandler)) : (this._addEvent(e, "mousedown", this._globalMouseDownHandler), this._addEvent(e, "click", this._globalClickHandler), this._addEvent(e, "contextmenu", this._globalContextHandler), this._addEvent(e, "dblclick", this._globalDbClickHandler), this.config.mouseScrool != FamilyTree.action.zoom && this.config.mouseScrool != FamilyTree.action.ctrlZoom || (this._addEvent(e, "DOMMouseScroll", this._mouseScrollHandler), this._addEvent(e, "mousewheel", this._mouseScrollHandler)));
     var t = this.getMenuButton();
     t && this._addEvent(t, "click", this._menuClickHandler)
   }
-}, FamilyTree.prototype._addEvent = function (e, t, i, r) {
+};
+FamilyTree.prototype._addEvent = function (e, t, i, r) {
   var a, n;
   (r || (r = ""), e.getListenerList || (e.getListenerList = {}), e.getListenerList[t + r]) || (a = this, n = i, i = function () {
     if (n) return n.apply(a, [this, arguments[0]])
@@ -874,7 +929,8 @@ FamilyTree._defaultConfig = function (e) {
     var t = i.apply(this, arguments);
     return !1 === t && (e.stopPropagation(), e.preventDefault()), t
   }
-}, FamilyTree.prototype._removeEvent = function (e, t) {
+};
+FamilyTree.prototype._removeEvent = function (e, t) {
   if (e.getListenerList[t]) {
     var i = e.getListenerList[t];
     e.removeEventListener(t, i, !1), delete e.getListenerList[t]
@@ -1092,14 +1148,18 @@ FamilyTree._defaultConfig = function (e) {
   FamilyTree.isNEU(this.interval) && (clearInterval(this.interval), this.interval = null);
   var e = this.obj.element.querySelector("[data-bft-edit-form]");
   e && e.parentNode && e.parentNode.removeChild(e)
-}, FamilyTree.prototype.getSvg = function () {
+};
+FamilyTree.prototype.getSvg = function () {
   var e = this.element.getElementsByTagName("svg");
   return e && e.length ? e[0] : null
-}, FamilyTree.prototype.getPointerElement = function () {
+};
+FamilyTree.prototype.getPointerElement = function () {
   return this.element.querySelector("g[data-pointer]")
-}, FamilyTree.prototype.getNodeElement = function (e) {
+};
+FamilyTree.prototype.getNodeElement = function (e) {
   return this.element.querySelector("g[" + FamilyTree.attr.node_id + "='" + e + "']")
-}, FamilyTree.prototype.getMenuButton = function () {
+};
+FamilyTree.prototype.getMenuButton = function () {
   return this.element.querySelector("[" + FamilyTree.attr.control_export_menu + "]")
 }, FamilyTree.menuUI = function () {}, FamilyTree.menuUI.prototype.init = function (e, t) {
   this.obj = e, this.wrapper = null, this.menu = t, this._event_id = FamilyTree._guid()
@@ -1988,11 +2048,14 @@ FamilyTree._defaultConfig = function (e) {
   return FamilyTree.isNEU(r) && (r = 0), FamilyTree.isNEU(a) && (a = 0), `<svg width="${e}" height="${t}" x="${r}" y="${a}" viewBox="0 0 512.011 512.011" >\n                <path fill="${i}" d="M299.355,445.356c-1.621,1.536-2.56,3.755-2.56,5.973c0,2.304,0.939,4.437,2.56,6.059 c1.536,1.621,3.755,2.475,5.973,2.475c2.304,0,4.523-0.853,6.059-2.475c1.621-1.536,2.475-3.755,2.475-6.059 c0-2.219-0.853-4.437-2.475-5.973C308.23,442.113,302.512,442.199,299.355,445.356z"/>\n                <path fill="${i}" d="M276.23,458.668c-1.621,1.621-2.475,3.755-2.475,6.059c0,2.219,0.939,4.437,2.475,5.973 c1.621,1.621,3.84,2.56,6.059,2.56c2.219,0,4.437-0.939,5.973-2.56c1.621-1.536,2.56-3.755,2.56-5.973 c0-2.304-0.939-4.437-2.56-6.059C285.104,455.511,279.387,455.511,276.23,458.668z"/>\n                <path fill="${i}" d="M392.539,196.268c0-2.68-1.263-5.205-3.405-6.818c-8.55-6.443-30.729-26.957-30.729-44.382 c0-4.71-3.823-8.533-8.533-8.533s-8.533,3.823-8.533,8.533c0,24.678,24.354,47.249,34.014,55.228 c-1.835,33.476-24.917,95.223-33.118,111.625c-7.654,15.317-48.154,63.548-86.229,63.548s-78.575-48.23-86.229-63.548 c-8.542-17.084-33.237-83.379-33.237-115.652V170.54c33.835-0.802,157.321-6.929,218.453-52.779 c3.772-2.825,4.531-8.175,1.707-11.947c-2.825-3.763-8.166-4.531-11.947-1.707c-65.186,48.887-215.236,49.493-216.747,49.493 c-4.71,0-8.533,3.823-8.533,8.533v34.133c0,36.625,26.871,106.965,35.029,123.281c10.394,20.77,55.834,72.986,101.504,72.986 s91.11-52.215,101.504-72.986C365.668,303.233,392.539,232.893,392.539,196.268z"/>\n                <path fill="${i}" d="M249.947,463.276c-1.536,1.621-2.475,3.84-2.475,6.059c0,2.219,0.939,4.437,2.475,6.059 c1.621,1.536,3.84,2.475,6.059,2.475s4.437-0.939,6.059-2.475c1.536-1.621,2.475-3.84,2.475-6.059 c0-2.219-0.939-4.437-2.475-6.059C258.907,460.119,253.104,460.119,249.947,463.276z"/>\n                <path fill="${i}" d="M34.139,230.401c0,18.85,6.75,36.659,19.098,50.688c-1.348,5.76-2.031,11.648-2.031,17.579 c0,42.342,34.458,76.8,76.8,76.8c6.494,0,12.954-0.819,19.191-2.432c4.565-1.178,7.305-5.828,6.127-10.394 c-1.178-4.565-5.828-7.305-10.394-6.127c-4.847,1.254-9.865,1.886-14.925,1.886c-32.939,0-59.733-26.795-59.733-59.733 c0-5.922,0.879-11.793,2.603-17.459c0.922-3.021,0.102-6.298-2.133-8.525c-11.307-11.298-17.536-26.308-17.536-42.283 c0-19.251,9.421-37.453,25.199-48.674c3.78-2.688,4.719-7.893,2.116-11.742c-6.707-9.89-10.249-21.461-10.249-33.451 c0-28.843,20.591-53.53,48.947-58.701c2.432-0.452,4.557-1.929,5.811-4.053c18.987-32.137,40.892-56.713,133.888-56.713 c71.714,0,128.947,23.484,142.413,58.436c0.888,2.304,2.731,4.105,5.052,4.949c23.535,8.559,39.356,31.095,39.356,56.081 c0,11.989-3.541,23.561-10.249,33.451c-2.603,3.849-1.664,9.054,2.116,11.742c15.778,11.221,25.199,29.423,25.199,48.674 c0,15.974-6.229,30.984-17.536,42.283c-2.236,2.227-3.055,5.504-2.133,8.525c1.724,5.666,2.603,11.537,2.603,17.459 c0,32.939-26.795,59.733-59.733,59.733c-5.018,0-10.001-0.623-14.814-1.852c-4.574-1.186-9.207,1.579-10.377,6.144 c-1.169,4.574,1.587,9.216,6.153,10.385c6.195,1.587,12.595,2.389,19.038,2.389c42.342,0,76.8-34.458,76.8-76.8 c0-5.931-0.683-11.819-2.031-17.579c12.348-14.029,19.098-31.838,19.098-50.688c0-22.11-9.643-43.128-26.138-57.643 c5.956-11.102,9.071-23.475,9.071-36.224c0-30.865-18.748-58.82-47.044-70.733C395.475,25.704,334.598,0.001,256.919,0.001 c-90.172,0-121.984,21.7-146.62,61.85c-34.475,8.115-59.093,38.921-59.093,74.684c0,12.749,3.115,25.122,9.071,36.224 C43.782,187.274,34.139,208.291,34.139,230.401z"/>\n                <path fill="${i}" d="M316.507,424.876c-1.621,1.621-2.475,3.84-2.475,6.059c0,2.304,0.853,4.437,2.475,6.059 c1.621,1.536,3.755,2.475,5.973,2.475c2.304,0,4.437-0.939,6.059-2.475c1.621-1.621,2.475-3.755,2.475-6.059 c0-2.219-0.853-4.437-2.475-6.059C325.382,421.719,319.664,421.719,316.507,424.876z"/>\n                <path fill="${i}" d="M223.664,458.668c-1.536,1.621-2.475,3.755-2.475,6.059c0,2.219,0.939,4.437,2.475,6.059 c1.621,1.536,3.84,2.475,6.059,2.475c2.304,0,4.437-0.939,6.059-2.475c1.621-1.621,2.475-3.84,2.475-6.059 c0-2.219-0.853-4.437-2.475-6.059C232.624,455.511,226.907,455.511,223.664,458.668z"/>\n                <path fill="${i}" d="M337.67,411.905c1.621-1.621,2.475-3.755,2.475-6.059c0-2.219-0.853-4.437-2.475-6.059 c-3.157-3.157-8.875-3.072-12.032,0.085c-1.621,1.536-2.56,3.755-2.56,5.973c0,2.304,0.939,4.437,2.56,6.059 c1.536,1.621,3.755,2.475,5.973,2.475C333.915,414.38,336.048,413.527,337.67,411.905z"/>\n                <path fill="${i}" d="M213.339,238.935c4.71,0,8.533-3.823,8.533-8.533v-5.615c0.546,0.529,0.922,0.964,0.964,1.024 c1.519,2.918,4.497,4.591,7.578,4.591c1.323,0,2.671-0.307,3.934-0.964c4.181-2.176,5.803-7.33,3.627-11.511 c-2.534-4.873-10.581-13.124-24.636-13.124c-14.054,0-22.101,8.252-24.636,13.124c-2.125,4.087-0.555,8.969,3.456,11.23 c4.011,2.287,9.156,0.811,11.563-3.123c0.077-0.128,0.495-0.623,1.084-1.195v5.564 C204.806,235.112,208.629,238.935,213.339,238.935z"/>\n                <path fill="${i}" d="M256.006,332.801c20.028,0,30.507-9.907,31.633-11.034c3.294-3.294,3.285-8.567,0.043-11.913 c-3.234-3.345-8.61-3.439-12.015-0.247c-0.265,0.247-6.699,6.127-19.661,6.127c-12.774,0-19.208-5.709-19.652-6.118 c-3.336-3.251-8.678-3.217-11.981,0.085c-3.337,3.336-3.337,8.73,0,12.066C225.499,322.894,235.978,332.801,256.006,332.801z"/>\n                <path fill="${i}" d="M298.672,238.935c4.71,0,8.533-3.823,8.533-8.533v-5.615c0.546,0.529,0.922,0.964,0.964,1.024 c1.519,2.918,4.497,4.591,7.578,4.591c1.323,0,2.671-0.307,3.934-0.964c4.181-2.176,5.803-7.33,3.627-11.511 c-2.534-4.873-10.581-13.124-24.636-13.124s-22.101,8.252-24.636,13.124c-2.125,4.087-0.555,8.969,3.456,11.23 c4.011,2.287,9.165,0.811,11.563-3.123c0.077-0.128,0.495-0.623,1.084-1.195v5.564 C290.139,235.112,293.962,238.935,298.672,238.935z"/>\n                <path fill="${i}" d="M511.571,500.771l-8.533-25.6c-8.883-26.658-62.464-65.212-136.098-65.212c-3.482,0-6.613,2.116-7.919,5.333 c-0.316,0.802-33.015,79.642-103.014,79.642c-69.99,0-102.69-79.181-103.014-79.983c-1.306-3.226-4.437-5.35-7.919-5.35 c-106.001,0-130.97,50.185-136.098,65.57l-8.533,25.6c-1.493,4.471,0.93,9.301,5.402,10.795c4.48,1.502,9.301-0.93,10.795-5.402 l8.533-25.6c8.465-25.412,42.974-52.514,114.381-53.845c9.293,19.703,45.577,85.282,116.454,85.282 c70.827,0,107.102-65.229,116.437-84.898c64.051,1.835,108.339,35.294,114.398,53.461l8.533,25.6 c1.195,3.576,4.523,5.837,8.098,5.837c0.887,0,1.801-0.137,2.697-0.435C510.64,510.073,513.064,505.243,511.571,500.771z"/>\n                <path fill="${i}" d="M375.472,281.601v17.067c0,4.71,3.823,8.533,8.533,8.533c4.71,0,8.533-3.823,8.533-8.533v-17.067 c0-4.71-3.823-8.533-8.533-8.533C379.295,273.068,375.472,276.891,375.472,281.601z"/>\n                <path fill="${i}" d="M188.934,405.847c0-2.219-0.939-4.437-2.56-5.973c-3.157-3.243-8.875-3.243-12.032,0 c-1.621,1.536-2.475,3.755-2.475,5.973c0,2.304,0.853,4.437,2.475,6.059s3.755,2.475,6.059,2.475 c2.219,0,4.437-0.853,5.973-2.475C187.995,410.284,188.934,408.151,188.934,405.847z"/>\n                <path fill="${i}" d="M189.531,439.468c2.219,0,4.437-0.939,5.973-2.475c1.621-1.621,2.475-3.755,2.475-6.059c0-2.219-0.853-4.437-2.475-6.059 c-3.157-3.157-8.875-3.157-12.032,0c-1.621,1.621-2.475,3.84-2.475,6.059c0,2.304,0.853,4.437,2.475,6.059 C185.008,438.529,187.227,439.468,189.531,439.468z"/>\n                <path fill="${i}" d="M200.624,445.356c-1.621,1.621-2.56,3.755-2.56,6.059c0,2.219,0.939,4.437,2.56,5.973c1.621,1.621,3.755,2.56,6.059,2.56 c2.219,0,4.437-0.939,5.973-2.56c1.621-1.536,2.475-3.755,2.475-5.973c0-2.304-0.853-4.523-2.475-6.059 C209.499,442.199,203.782,442.199,200.624,445.356z"/>\n                <path fill="${i}" d="M119.472,281.601v17.067c0,4.71,3.823,8.533,8.533,8.533s8.533-3.823,8.533-8.533v-17.067 c0-4.71-3.823-8.533-8.533-8.533S119.472,276.891,119.472,281.601z"/>\n            </svg>`
 }, FamilyTree.icon.teddy = function (e, t, i, r, a) {
   return FamilyTree.isNEU(r) && (r = 0), FamilyTree.isNEU(a) && (a = 0), `<svg width="${e}" height="${t}" x="${r}" y="${a}" viewBox="0 0 512 512">\n                <path fill="${i}" d="M234.513,246.613c9.378-1.929,16.555-9.02,21.487-15.863c4.932,6.844,12.109,13.935,21.487,15.863 c1.459,0.299,3.089,0.486,4.873,0.486c6.118,0,13.978-2.304,22.34-10.667c3.337-3.337,3.337-8.73,0-12.066s-8.73-3.337-12.066,0 c-4.361,4.369-8.337,6.212-11.699,5.53c-6.912-1.408-13.611-12.203-16.401-18.364c9.523-3.866,17.067-13.577,17.067-23.799 c0-9.353-9.566-14.933-25.6-14.933c-16.026,0-25.6,5.581-25.6,14.933c0,10.223,7.535,19.934,17.067,23.799 c-2.807,6.178-9.498,16.956-16.401,18.364c-3.405,0.666-7.339-1.178-11.699-5.53c-3.336-3.337-8.73-3.337-12.066,0 s-3.337,8.73,0,12.066C218.104,247.236,228.062,247.91,234.513,246.613z M263.748,190.669c-1.502,2.944-4.873,5.598-7.748,5.598\ts-6.246-2.654-7.748-5.598C251.793,189.833,260.207,189.833,263.748,190.669z"/>\n                <path fill="${i}" d="M390.033,53.7c1.621,1.613,2.5,3.755,2.5,6.033s-0.879,4.42-2.5,6.025c-3.337,3.337-3.337,8.738,0,12.075 c1.664,1.664,3.849,2.5,6.033,2.5s4.369-0.836,6.033-2.492c4.838-4.838,7.501-11.273,7.501-18.108s-2.662-13.269-7.501-18.099 c-9.984-9.984-26.214-9.984-36.198,0c-3.337,3.328-3.337,8.73,0,12.066s8.73,3.337,12.066,0 C381.303,50.372,386.697,50.372,390.033,53.7z"/>\n                <path fill="${i}" d="M311.467,136.533c7.057,0,12.8-5.743,12.8-12.8c0-7.057-5.743-12.8-12.8-12.8s-12.8,5.743-12.8,12.8 C298.667,130.79,304.41,136.533,311.467,136.533z"/>\n                <path fill="${i}" d="M200.533,136.533c7.057,0,12.8-5.743,12.8-12.8c0-7.057-5.743-12.8-12.8-12.8s-12.8,5.743-12.8,12.8 C187.733,130.79,193.476,136.533,200.533,136.533z"/>\n                <path fill="${i}" d="M115.934,80.333c2.185,0,4.369-0.836,6.042-2.5c3.328-3.337,3.328-8.738-0.009-12.075c-1.613-1.604-2.5-3.746-2.5-6.025 s0.887-4.42,2.509-6.033c3.209-3.226,8.841-3.226,12.058,0c3.328,3.337,8.738,3.328,12.066,0 c3.337-3.328,3.337-8.738,0.009-12.066c-9.677-9.677-26.539-9.668-36.207-0.009c-4.838,4.838-7.501,11.273-7.501,18.108 s2.662,13.269,7.501,18.108C111.565,79.497,113.749,80.333,115.934,80.333z"/>\n                <path fill="${i}" d="M498.552,286.191c-28.262-23.945-91.742-14.2-98.884-13.005c-4.651,0.768-7.791,5.171-7.014,9.813 c0.777,4.651,5.171,7.799,9.813,7.014c17.246-2.867,66.133-6.827,85.052,9.199c5.06,4.284,7.415,9.54,7.415,16.521 c0,3.977-1.476,6.946-4.779,9.626c-24.098,19.567-114.33,5.982-147.063-0.913c-3.703-0.776-7.441,0.981-9.242,4.275 c-1.801,3.311-1.212,7.424,1.434,10.095c0.12,0.119,8.499,8.755,12.493,19.951c-2.125-0.222-4.267-0.367-6.443-0.367 c-37.641,0-68.267,34.458-68.267,76.8c0,7.629,1.024,14.993,2.884,21.956c-3.823,1.715-10.197,3.644-19.951,3.644 c-10.052,0-16.367-2.082-19.908-3.814c1.826-6.912,2.842-14.217,2.842-21.786c0-42.342-30.626-76.8-68.267-76.8 c-2.176,0-4.318,0.145-6.443,0.367c3.994-11.196,12.373-19.831,12.476-19.934c2.671-2.671,3.268-6.775,1.468-10.095 c-1.792-3.319-5.521-5.069-9.259-4.292c-32.725,6.895-122.974,20.48-147.063,0.913c-3.302-2.68-4.779-5.649-4.779-9.626 c0-6.98,2.355-12.228,7.407-16.512c18.867-15.991,67.806-12.066,85.06-9.208c4.651,0.794,9.045-2.364,9.813-7.014 c0.776-4.651-2.364-9.045-7.006-9.813c-7.151-1.195-70.613-10.957-98.884,13.005C4.651,293.649,0,303.863,0,315.733 c0,9.079,3.831,16.998,11.093,22.886c27.179,22.05,102.818,12.783,140.535,6.426c-2.825,5.47-5.188,11.896-6.11,18.825 c-25.216,11.29-43.119,38.98-43.119,71.33c0,42.342,30.626,76.8,68.267,76.8c25.446,0,47.642-15.778,59.383-39.057 c5.743,2.56,14.174,4.924,25.95,4.924c11.674,0,20.164-2.287,26.035-4.77C293.794,496.29,315.938,512,341.333,512 c37.641,0,68.267-34.458,68.267-76.8c0-32.35-17.903-60.041-43.119-71.33c-0.922-6.929-3.277-13.355-6.101-18.825 c37.717,6.357,113.365,15.633,140.527-6.426c7.262-5.888,11.093-13.807,11.093-22.886 C512,303.863,507.349,293.649,498.552,286.191z M170.667,494.933c-28.237,0-51.2-26.795-51.2-59.733s22.963-59.733,51.2-59.733 s51.2,26.795,51.2,59.733S198.904,494.933,170.667,494.933z M392.533,435.2c0,32.939-22.963,59.733-51.2,59.733 c-20.983,0-39.04-14.814-46.942-35.942c-0.145-0.614-0.324-1.186-0.606-1.766c-2.338-6.818-3.652-14.242-3.652-22.025 c0-32.939,22.963-59.733,51.2-59.733C369.57,375.467,392.533,402.261,392.533,435.2z"/>\n                <path fill="${i}" d="M307.2,443.733c0,18.825,15.309,34.133,34.133,34.133c18.825,0,34.133-15.309,34.133-34.133 c0-18.825-15.309-34.133-34.133-34.133C322.509,409.6,307.2,424.909,307.2,443.733z M358.4,443.733 c0,9.412-7.654,17.067-17.067,17.067c-9.404,0-17.067-7.654-17.067-17.067c0-9.412,7.663-17.067,17.067-17.067 C350.746,426.667,358.4,434.321,358.4,443.733z"/>\n                <path fill="${i}" d="M115.541,118.161c-8.619,21.709-13.141,45.525-13.141,69.572c0,67.849,52.762,136.533,153.6,136.533 s153.6-68.685,153.6-136.533c0-24.491-4.412-47.846-13.107-69.581c26.957-5.76,47.24-29.764,47.24-58.419 C443.733,26.795,416.93,0,384,0c-24.67,0-46.14,14.916-55.108,36.745C307.115,23.859,282.368,17.067,256,17.067 c-26.615,0-51.2,6.716-73.259,19.925C174.08,14.754,153.088,0,128,0C95.061,0,68.267,26.795,68.267,59.733 C68.267,88.397,88.559,112.41,115.541,118.161z M128,17.067c19.226,0,35.021,12.177,40.115,30.054 c-11.085,8.61-21.163,18.816-29.901,30.592c-2.807,3.789-2.014,9.131,1.775,11.938c3.789,2.816,9.139,2.022,11.938-1.766 c8.9-12.006,19.26-22.281,30.788-30.507C204.288,41.95,228.949,34.133,256,34.133c41.429,0,78.396,19.098,104.098,53.786 c1.681,2.253,4.25,3.447,6.869,3.447c1.766,0,3.55-0.546,5.077-1.681c3.78-2.799,4.574-8.149,1.775-11.938 c-8.969-12.092-19.157-22.485-30.345-31.104c5.427-17.374,21.632-29.577,40.525-29.577c23.526,0,42.667,19.14,42.667,42.667 S407.526,102.4,384,102.4c-2.935,0-5.658,1.502-7.228,3.985c-1.553,2.483-1.732,5.589-0.461,8.243 c10.761,22.443,16.222,47.044,16.222,73.105C392.533,247.1,345.634,307.2,256,307.2s-136.533-60.1-136.533-119.467 c0-25.617,5.615-50.901,16.23-73.122c1.263-2.637,1.084-5.751-0.478-8.226c-1.562-2.483-4.292-3.985-7.219-3.985 c-23.526,0-42.667-19.14-42.667-42.667S104.474,17.067,128,17.067z"/>\n                <path fill="${i}" d="M256,290.133c47.053,0,85.333-30.626,85.333-68.267c0-36.258-36.489-76.8-85.333-76.8s-85.333,40.542-85.333,76.8 C170.667,259.507,208.947,290.133,256,290.133z M256,162.133c38.451,0,68.267,32.111,68.267,59.733 c0,28.237-30.626,51.2-68.267,51.2c-37.641,0-68.267-22.963-68.267-51.2C187.733,194.244,217.557,162.133,256,162.133z"/>\n                <path fill="${i}" d="M170.667,409.6c-18.825,0-34.133,15.309-34.133,34.133c0,18.825,15.309,34.133,34.133,34.133 s34.133-15.309,34.133-34.133C204.8,424.909,189.491,409.6,170.667,409.6z M170.667,460.8c-9.412,0-17.067-7.654-17.067-17.067 c0-9.412,7.654-17.067,17.067-17.067c9.412,0,17.067,7.654,17.067,17.067C187.733,453.146,180.079,460.8,170.667,460.8z"/>\n            </svg>`
-}, FamilyTree.prototype.exportPDFProfile = function (e, t) {
+};
+FamilyTree.prototype.exportPDFProfile = function (e, t) {
   e = this._defaultExportProfileOptions(e, "pdf"), this._exportProfile(e, t)
-}, FamilyTree.prototype.exportPNGProfile = function (e, t) {
+};
+FamilyTree.prototype.exportPNGProfile = function (e, t) {
   e = this._defaultExportProfileOptions(e, "png"), this._exportProfile(e, t)
-}, FamilyTree.prototype.shareProfile = function (e) {
+};
+FamilyTree.prototype.shareProfile = function (e) {
   var t;
   "object" == typeof e ? e = (t = e).focusId : t = this.editUI.content(e, !0, !0, "100%", !0);
   var i = new URL(window.location.href);
@@ -2007,15 +2070,20 @@ FamilyTree._defaultConfig = function (e) {
   } catch (e) {
     console.error("error: " + e)
   }
-}, FamilyTree.prototype.exportPDF = function (e, t) {
+};
+FamilyTree.prototype.exportPDF = function (e, t) {
   e = this._defaultExportOptions(e, "pdf"), this._export(e, t)
-}, FamilyTree.prototype.exportPNG = function (e, t) {
+};
+FamilyTree.prototype.exportPNG = function (e, t) {
   e = this._defaultExportOptions(e, "png"), this._export(e, t)
-}, FamilyTree.prototype.exportSVG = function (e, t) {
+};
+FamilyTree.prototype.exportSVG = function (e, t) {
   e = this._defaultExportOptions(e, "svg"), this._export(e, t)
-}, FamilyTree.prototype._defaultExportOptions = function (e, t) {
+};
+FamilyTree.prototype._defaultExportOptions = function (e, t) {
   return null == e && (e = {}), "svg" == t ? (e.ext = "svg", e.mime = "image/svg+xml") : "pdf" == t ? (e.mime = "application/pdf", e.ext = "pdf") : "png" == t && (e.mime = "image/png", e.ext = "png"), null == e.margin && (e.margin = [50, 40, 50, 40]), null == e.padding && (e.padding = 0), null == e.landscape && (e.landscape = !1), null == e.filename && (e.filename = "FamilyTree." + e.ext), null == e.scale && (e.scale = "fit"), null == e.format && (e.format = "fit"), null == e.header && (e.header = ""), null == e.footer && (e.footer = "Page {current-page} of {total-pages}"), null == e.openInNewTab && (e.openInNewTab = !1), null == e.mode && (e.mode = "bft-" + this.config.mode), e
-}, FamilyTree.prototype._export = function (e, t) {
+};
+FamilyTree.prototype._export = function (e, t) {
   var i = this,
     r = {
       id: e.nodeId,
@@ -2060,7 +2128,8 @@ FamilyTree._defaultConfig = function (e) {
       })))
     }))
   }))
-}, FamilyTree.prototype.exportCSV = function (e) {
+};
+FamilyTree.prototype.exportCSV = function (e) {
   e || (e = "FamilyTree.csv");
   var t = {
     ext: "csv",
@@ -2077,7 +2146,8 @@ FamilyTree._defaultConfig = function (e) {
     };
   if (!1 === FamilyTree.events.publish("exportend", [this, r])) return !1;
   FamilyTree._downloadFile("text/csv;charset=utf-8;", "﻿" + r.content, r.filename, r.openInNewTab)
-}, FamilyTree.prototype.exportXML = function (e) {
+};
+FamilyTree.prototype.exportXML = function (e) {
   e || (e = "FamilyTree.xml");
   var t = {
     ext: "xml",
@@ -2094,9 +2164,11 @@ FamilyTree._defaultConfig = function (e) {
     };
   if (!1 === FamilyTree.events.publish("exportend", [this, r])) return !1;
   FamilyTree._downloadFile("application/xml", r.content, r.filename, r.openInNewTab)
-}, FamilyTree.prototype._pages = function (e, t, i) {
+};
+FamilyTree.prototype._pages = function (e, t, i) {
   "A5" == e.format && "fit" != e.scale || "A4" == e.format && "fit" != e.scale || "A3" == e.format && "fit" != e.scale || "A2" == e.format && "fit" != e.scale || "A1" == e.format && "fit" != e.scale || "Letter" == e.format && "fit" != e.scale || "Legal" == e.format && "fit" != e.scale ? i(this._pagesA100(e, t, e.scale)) : "A5" == e.format && "fit" == e.scale || "A4" == e.format && "fit" == e.scale || "A3" == e.format && "fit" == e.scale || "A2" == e.format && "fit" == e.scale || "A1" == e.format && "fit" == e.scale || "Letter" == e.format && "fit" == e.scale || "Legal" == e.format && "fit" == e.scale ? i(this._pagesAfit(e, t)) : "fit" == e.format && i(this._pagesFit(e, t))
-}, FamilyTree.prototype._pagesFit = function (e, t) {
+};
+FamilyTree.prototype._pagesFit = function (e, t) {
   var i = t.getAttribute("width"),
     r = t.getAttribute("height"),
     a = FamilyTree._getViewBox(t),
@@ -2112,7 +2184,8 @@ FamilyTree._defaultConfig = function (e) {
     },
     innerSize: n
   }]
-}, FamilyTree.prototype._pagesAfit = function (e, t) {
+};
+FamilyTree.prototype._pagesAfit = function (e, t) {
   var i = t.getAttribute("width"),
     r = 0,
     a = 0;
@@ -2141,7 +2214,8 @@ FamilyTree._defaultConfig = function (e) {
   var n = e.landscape ? a - (e.margin[1] + e.margin[3]) : r - (e.margin[1] + e.margin[3]),
     o = (e.landscape ? (e.margin[0], e.margin[2]) : (e.margin[0], e.margin[2]), n / i);
   return this._pagesA100(e, t, 100 * o)
-}, FamilyTree.prototype._pagesA100 = function (e, t, i) {
+};
+FamilyTree.prototype._pagesA100 = function (e, t, i) {
   var r = FamilyTree._getViewBox(t),
     a = 0,
     n = 0;
@@ -2192,9 +2266,11 @@ FamilyTree._defaultConfig = function (e) {
     f += p, u = l
   }
   return y
-}, FamilyTree.prototype._defaultExportProfileOptions = function (e, t) {
+};
+FamilyTree.prototype._defaultExportProfileOptions = function (e, t) {
   return (FamilyTree.isNEU(e) || FamilyTree.isNEU(e.id)) && console.error("options.id is not defilned"), "svg" == t ? (e.ext = "svg", e.mime = "image/svg+xml") : "pdf" == t ? (e.mime = "application/pdf", e.ext = "pdf") : "png" == t && (e.mime = "image/png", e.ext = "png"), null == e.margin && (e.margin = [50, 40, 50, 40]), null == e.padding && (e.padding = 0), null == e.landscape && (e.landscape = !1), null == e.filename && (e.filename = "Profile." + e.ext), null == e.scale && (e.scale = "fit"), null == e.format && (e.format = "A4"), null == e.header && (e.header = ""), null == e.footer && (e.footer = ""), null == e.openInNewTab && (e.openInNewTab = !1), null == e.mode && (e.mode = "bft-" + this.config.mode), e
-}, FamilyTree.prototype._exportProfile = function (e, t) {
+};
+FamilyTree.prototype._exportProfile = function (e, t) {
   var i = this,
     r = 0,
     a = 0;
@@ -2379,7 +2455,8 @@ FamilyTree._defaultConfig = function (e) {
   t(e)
 }, FamilyTree._importCenter = function (e) {
   e && (e.style.left = (window.innerWidth - e.offsetWidth) / 2 + "px", e.style.top = (window.innerHeight - e.offsetHeight) / 2 + "px")
-}, FamilyTree.prototype.importXML = function () {
+};
+FamilyTree.prototype.importXML = function () {
   var e = this,
     t = document.createElement("INPUT");
   t.setAttribute("type", "file"), t.setAttribute("accept", ".xml"), t.style.display = "none", t.onchange = function (t) {
@@ -2391,19 +2468,22 @@ FamilyTree._defaultConfig = function (e) {
       0 != FamilyTree.events.publish("import", [e, i]) && (e.config.nodes = i, e.draw())
     }, r.readAsText(i.files[0])
   }, t.click()
-}, FamilyTree.prototype.expand = function (e, t, i) {
+};
+FamilyTree.prototype.expand = function (e, t, i) {
   var r = {
     id: e,
     ids: t
   };
   this._draw(!1, FamilyTree.action.expand, r, i)
-}, FamilyTree.prototype.collapse = function (e, t, i) {
+};
+FamilyTree.prototype.collapse = function (e, t, i) {
   var r = {
     id: e,
     ids: t
   };
   this._draw(!1, FamilyTree.action.collapse, r, i)
-}, FamilyTree.prototype.expandCollapse = function (e, t, i, r) {
+};
+FamilyTree.prototype.expandCollapse = function (e, t, i, r) {
   Array.isArray(t) || (t = []), Array.isArray(i) || (i = []);
   var a = {
     id: e,
@@ -2412,20 +2492,23 @@ FamilyTree._defaultConfig = function (e) {
     ids: t.concat(i)
   };
   this._draw(!1, FamilyTree.action.collapse, a, r)
-}, FamilyTree.prototype.changeRoots = function (e, t, i) {
+};
+FamilyTree.prototype.changeRoots = function (e, t, i) {
   this.config.roots = t;
   var r = {
     id: e
   };
   this._draw(!1, FamilyTree.action.update, r, i)
-}, FamilyTree.prototype.expandCollapseToLevel = function (e, t, i, r) {
+};
+FamilyTree.prototype.expandCollapseToLevel = function (e, t, i, r) {
   this.config.collapse = t, null == i && (i = {}), this.config.expand = i;
   var a = {
     id: e,
     method: "expandCollapseToLevel"
   };
   this._draw(!1, FamilyTree.action.collapse, a, r)
-}, FamilyTree.prototype.maximize = function (e, t, i, r) {
+};
+FamilyTree.prototype.maximize = function (e, t, i, r) {
   var a = this,
     n = {
       id: e,
@@ -2434,7 +2517,8 @@ FamilyTree._defaultConfig = function (e) {
   FamilyTree.isNEU(n.id) && (n.id = this.roots[0].id, n.all = !0), n.options.horizontal = !1, n.options.vertical = !1, t && (n.options.horizontal = t), i && (n.options.vertical = i), this._draw(!1, FamilyTree.action.maximize, n, (function () {
     a.ripple(e), r && r()
   }))
-}, FamilyTree.prototype.minimize = function (e, t) {
+};
+FamilyTree.prototype.minimize = function (e, t) {
   var i = this,
     r = {
       id: e
@@ -2442,7 +2526,8 @@ FamilyTree._defaultConfig = function (e) {
   FamilyTree.isNEU(r.id) && (r.id = this.roots[0].id, r.all = !0), this._draw(!1, FamilyTree.action.minimize, r, (function () {
     i.ripple(e), t && t()
   }))
-}, FamilyTree.prototype._expCollHandler = function (e) {
+};
+FamilyTree.prototype._expCollHandler = function (e) {
   this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide();
   var t = this.getNode(e),
     i = this.getCollapsedIds(t);
@@ -2453,12 +2538,14 @@ FamilyTree._defaultConfig = function (e) {
     if (!1 === FamilyTree.events.publish("expcollclick", [this, !0, e, t.childrenIds])) return !1;
     this.collapse(e, t.childrenIds, !1)
   }
-}, FamilyTree.prototype._upHandler = function (e) {
+};
+FamilyTree.prototype._upHandler = function (e) {
   this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide();
   var t = this._upHandlerCreateArgs(e);
   if (!1 === FamilyTree.events.publish("up-click", [this, t])) return !1;
   this.changeRoots(t.id, t.roots, !1)
-}, FamilyTree.prototype._upHandlerCreateArgs = function (e) {
+};
+FamilyTree.prototype._upHandlerCreateArgs = function (e) {
   var t, i = this.getNode(e),
     r = Object.assign([], this.config.roots),
     a = this.getNode(i.pid);
@@ -2472,7 +2559,8 @@ FamilyTree._defaultConfig = function (e) {
     id: i.id,
     roots: r
   }
-}, FamilyTree.prototype._upHandlerCreateArgs = function (e) {
+};
+FamilyTree.prototype._upHandlerCreateArgs = function (e) {
   var t = this.getNode(e),
     i = Object.assign([], this.config.roots),
     r = this.getRecentRootsByNodeId(e);
@@ -2542,7 +2630,8 @@ FamilyTree._defaultConfig = function (e) {
     if (a.hasAttribute(FamilyTree.attr.control_node_circle_menu_name)) return t.stopPropagation(), t.preventDefault(), void this._nodeCircleNodeMenuItemMouseDownHandler(a, t, i);
     a = a.parentNode
   }
-}, FamilyTree.prototype._globalClickHandler = function (e, t) {
+};
+FamilyTree.prototype._globalClickHandler = function (e, t) {
   if (-1 != t.type.indexOf("touch") && this._touch && 1 == t.changedTouches.length) {
     if (t.changedTouches.length) {
       var i = {
@@ -2595,7 +2684,8 @@ FamilyTree._defaultConfig = function (e) {
     }]);
     l = l.parentNode
   }
-}, FamilyTree.prototype._globalContextHandler = function (e, t) {
+};
+FamilyTree.prototype._globalContextHandler = function (e, t) {
   for (var i = t.target; i != e;) {
     if (i.hasAttribute(FamilyTree.attr.node_id)) {
       var r = i.getAttribute(FamilyTree.attr.node_id),
@@ -2604,7 +2694,8 @@ FamilyTree._defaultConfig = function (e) {
     }
     i = i.parentNode
   }
-}, FamilyTree.prototype._nodeContextHandler = function (e, t) {
+};
+FamilyTree.prototype._nodeContextHandler = function (e, t) {
   t.preventDefault(), this.searchUI.hide(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide();
   var i = this.get(e),
     r = null;
@@ -2614,7 +2705,8 @@ FamilyTree._defaultConfig = function (e) {
       this.config.tags[n] && this.config.tags[n].nodeContextMenu && (r = this.config.tags[n].nodeContextMenu)
     }
   this.nodeContextMenuUI.show(t.pageX, t.pageY, e, null, r)
-}, FamilyTree.prototype._globalDbClickHandler = function (e, t) {
+};
+FamilyTree.prototype._globalDbClickHandler = function (e, t) {
   for (var i = t.target; i != e;) {
     if (i.hasAttribute(FamilyTree.attr.node_id)) {
       var r = i.getAttribute(FamilyTree.attr.node_id),
@@ -2623,7 +2715,8 @@ FamilyTree._defaultConfig = function (e) {
     }
     i = i.parentNode
   }
-}, FamilyTree.prototype._mouseScrollHandler = function (e, t) {
+};
+FamilyTree.prototype._mouseScrollHandler = function (e, t) {
   if (this.config.mouseScrool != FamilyTree.action.ctrlZoom || t.ctrlKey) {
     var i = this,
       r = !1,
@@ -2643,7 +2736,8 @@ FamilyTree._defaultConfig = function (e) {
       t > 0 ? t++ : t--, l += t, i.zoom(1 - t / 12 / 50, s), parseInt(l) == parseInt(o) ? r = !1 : d(e)
     }()
   }
-}, FamilyTree.prototype._nodeCircleNodeMenuItemMouseDownHandler = function (e, t, i) {
+};
+FamilyTree.prototype._nodeCircleNodeMenuItemMouseDownHandler = function (e, t, i) {
   var r = e.parentNode.getAttribute(FamilyTree.attr.control_node_circle_menu_wrraper_id),
     a = e.getAttribute(FamilyTree.attr.control_node_circle_menu_name),
     n = this.nodeCircleMenuUI._menu[a];
@@ -2754,7 +2848,8 @@ FamilyTree._defaultConfig = function (e) {
       };
     p.addEventListener(i.move, v), p.addEventListener(i.up, F), i.leave && p.addEventListener(i.leave, F)
   }
-}, FamilyTree.prototype._nodeMouseDownHandler = function (e, t, i) {
+};
+FamilyTree.prototype._nodeMouseDownHandler = function (e, t, i) {
   if (this.config.enableDragDrop) {
     var r = FamilyTree._getClientXY(t),
       a = e.getAttribute(FamilyTree.attr.node_id),
@@ -2845,7 +2940,8 @@ FamilyTree._defaultConfig = function (e) {
       };
     d.addEventListener(i.move, g), d.addEventListener(i.up, b), i.leave && d.addEventListener(i.leave, b)
   }
-}, FamilyTree.prototype._resizeHandler = function (e, t) {
+};
+FamilyTree.prototype._resizeHandler = function (e, t) {
   if (this.isVisible) {
     var i = this.getViewBox(),
       r = this.getSvg(),
@@ -2856,10 +2952,12 @@ FamilyTree._defaultConfig = function (e) {
       s = o > l ? l : o;
     r.setAttribute("width", this.width()), r.setAttribute("height", this.height()), i[2] = this.width() / s, i[3] = this.height() / s, this.setViewBox(i), this.xScrollUI.create(this.width()), this.yScrollUI.create(this.height()), this._draw(!1, FamilyTree.action.resize)
   }
-}, FamilyTree.prototype._nodeDbClickHandler = function (e, t) {
+};
+FamilyTree.prototype._nodeDbClickHandler = function (e, t) {
   if (!1 === FamilyTree.events.publish("dbclick", [this, this.get(e)])) return !1;
   this._commonClickHandler(e, t, this.config.nodeMouseDbClick)
-}, FamilyTree.prototype._nodeClickHandler = function (e, t) {
+};
+FamilyTree.prototype._nodeClickHandler = function (e, t) {
   var i = this.getNodeElement(e);
   if (i && i._dragEventFired) i._dragEventFired = !1;
   else {
@@ -2869,7 +2967,8 @@ FamilyTree._defaultConfig = function (e) {
       }])) return !1;
     this._commonClickHandler(e, t, this.config.nodeMouseClick)
   }
-}, FamilyTree.prototype._nodeCircleMenuItemClickHandler = function (e, t) {
+};
+FamilyTree.prototype._nodeCircleMenuItemClickHandler = function (e, t) {
   var i = e.parentNode.getAttribute(FamilyTree.attr.control_node_circle_menu_wrraper_id),
     r = e.getAttribute(FamilyTree.attr.control_node_circle_menu_name),
     a = this.nodeCircleMenuUI._menu[r];
@@ -2879,7 +2978,8 @@ FamilyTree._defaultConfig = function (e) {
     menuItem: a,
     event: t
   }])
-}, FamilyTree.prototype._nodeCircleMenuClickHandler = function (e) {
+};
+FamilyTree.prototype._nodeCircleMenuClickHandler = function (e) {
   this.searchUI.hide(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide();
   var t = this.getNode(e),
     i = null;
@@ -2889,13 +2989,16 @@ FamilyTree._defaultConfig = function (e) {
       this.config.tags[a] && this.config.tags[a].nodeCircleMenu && (i = this.config.tags[a].nodeCircleMenu)
     }
   this.nodeCircleMenuUI.show(e, i)
-}, FamilyTree.prototype._commonClickHandler = function (e, t, i) {
+};
+FamilyTree.prototype._commonClickHandler = function (e, t, i) {
   var r;
   (this.searchUI.hide(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide(), i == FamilyTree.action.expandCollapse && this.toggleExpandCollapse(e, t), i == FamilyTree.action.edit) && ((r = this.getNode(e)) && (this.editUI.show(r.id), this.ripple(r.id, t.clientX, t.clientY)));
   i == FamilyTree.action.details && ((r = this.getNode(e)) && (this.editUI.show(r.id, !0), this.ripple(r.id, t.clientX, t.clientY)))
-}, FamilyTree.prototype._menuHandlerMouseDownHandler = function (e, t) {
+};
+FamilyTree.prototype._menuHandlerMouseDownHandler = function (e, t) {
   t.stopPropagation(), t.preventDefault()
-}, FamilyTree.prototype._nodeMenuClickHandler = function (e, t, i) {
+};
+FamilyTree.prototype._nodeMenuClickHandler = function (e, t, i) {
   this.searchUI.hide(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide();
   var r = this.getNode(e),
     a = null;
@@ -2905,14 +3008,17 @@ FamilyTree._defaultConfig = function (e) {
       this.config.tags[o] && this.config.tags[o].nodeMenu && (a = this.config.tags[o].nodeMenu)
     }
   this.nodeMenuUI.showStickIn(t, e, null, a)
-}, FamilyTree.prototype._menuClickHandler = function (e, t) {
+};
+FamilyTree.prototype._menuClickHandler = function (e, t) {
   t.stopPropagation(), t.preventDefault(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.show(e.offsetLeft, e.offsetTop)
-}, FamilyTree.prototype._lonelyButtonHandler = function () {
+};
+FamilyTree.prototype._lonelyButtonHandler = function () {
   var e = {
     id: this.generateId()
   };
   !1 !== this.addNode(e, null, !0) && this.center(e.id)
-}, FamilyTree.prototype.toggleExpandCollapse = function (e, t) {
+};
+FamilyTree.prototype.toggleExpandCollapse = function (e, t) {
   var i = this.getNode(e),
     r = this.getCollapsedIds(i);
   if (r.length) {
@@ -2923,9 +3029,11 @@ FamilyTree._defaultConfig = function (e) {
     this.collapse(e, i.childrenIds, !1)
   }
   t && this.ripple(i.id, t.clientX, t.clientY)
-}, FamilyTree.prototype._move = function (e, t, i) {
+};
+FamilyTree.prototype._move = function (e, t, i) {
   i[0] = t, i[1] = e, this.setViewBox(i), this.xScrollUI.setPosition(), this.yScrollUI.setPosition()
-}, FamilyTree.prototype.startMove = function (e, t) {
+};
+FamilyTree.prototype.startMove = function (e, t) {
   if (e) {
     if (this._movePosition = e, !this._moveInterval) {
       var i = this,
@@ -2944,11 +3052,13 @@ FamilyTree._defaultConfig = function (e) {
       }), FamilyTree.MOVE_INTERVAL)
     }
   } else console.error("movePosition parameter not defined")
-}, FamilyTree.prototype.stopMove = function () {
+};
+FamilyTree.prototype.stopMove = function () {
   this._moveInterval && (clearInterval(this._moveInterval), this._moveInterval = null, this._movePosition = null)
 }, void 0 === FamilyTree && (FamilyTree = {}), FamilyTree.node = function (e, t, i, r) {
   this.templateName = r, this.id = e, this.pid = t, this.children = [], this.childrenIds = [], this.parent = null, this.stpid = null, this.stParent = null, this.stChildren = [], this.stChildrenIds = [], this.tags = i, this.tags || (this.tags = [])
-}, FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
+};
+FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
   var r = this;
   this.editUI.hide(), this.searchUI.hide(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide();
   var a = this.getViewBox(),
@@ -4420,7 +4530,8 @@ FamilyTree._defaultConfig = function (e) {
       n = r * a;
     this.bar.ignore = !0, this.bar.scrollTop = n, this.pos = this.bar.scrollTop, this.bar.style.visibility = a <= 0 ? "hidden" : ""
   }
-}, FamilyTree.prototype.zoom = function (e, t, i, r) {
+};
+FamilyTree.prototype.zoom = function (e, t, i, r) {
   var a = this.getViewBox().slice(0),
     n = a,
     o = a[2],
@@ -4686,14 +4797,16 @@ FamilyTree._defaultConfig = function (e) {
     }
   }
   t.content += l
-}, FamilyTree.prototype.addClink = function (e, t, i, r) {
+};
+FamilyTree.prototype.addClink = function (e, t, i, r) {
   return this.removeClink(e, t), this.config.clinks.push({
     from: e,
     to: t,
     label: i,
     template: r
   }), this
-}, FamilyTree.prototype.removeClink = function (e, t) {
+};
+FamilyTree.prototype.removeClink = function (e, t) {
   for (var i = this.config.clinks.length - 1; i >= 0; i--) {
     var r = this.config.clinks[i];
     r.from == e && r.to == t && this.config.clinks.splice(i, 1)
@@ -4896,14 +5009,16 @@ FamilyTree._defaultConfig = function (e) {
     s && d && -1 != t.res.visibleNodeIds.indexOf(d.id) && -1 != t.res.visibleNodeIds.indexOf(s.id) && (s.level >= d.level ? n(s, d, !1) : n(d, s, !0))
   }
   t.content += i
-}, FamilyTree.prototype.addSlink = function (e, t, i, r) {
+};
+FamilyTree.prototype.addSlink = function (e, t, i, r) {
   return this.removeClink(e, t), this.config.slinks.push({
     from: e,
     to: t,
     label: i,
     template: r
   }), this
-}, FamilyTree.prototype.removeSlink = function (e, t) {
+};
+FamilyTree.prototype.removeSlink = function (e, t) {
   for (var i = this.config.slinks.length - 1; i >= 0; i--) {
     var r = this.config.slinks[i];
     r.from == e && r.to == t && this.config.slinks.splice(i, 1)
@@ -5147,7 +5262,8 @@ FamilyTree._defaultConfig = function (e) {
   i.has(t.paramScale) && i.delete(t.paramScale), i.has(t.paramX) && i.delete(t.paramX), i.has(t.paramY) && i.delete(t.paramY), i.has(t.paramExp) && i.delete(t.paramExp), i.has(t.paramMin) && i.delete(t.paramMin), i.has(t.paramAdjustify) && i.delete(t.paramAdjustify), window.history.replaceState(null, null, "?" + i), FamilyTree.idb.delete(e, (function (t) {
     0 == t && console.error("Cannot delete row - " + e)
   }))
-}, FamilyTree._magnify = {}, FamilyTree.prototype.magnify = function (e, t, i, r, a) {
+}, FamilyTree._magnify = {};
+FamilyTree.prototype.magnify = function (e, t, i, r, a) {
   r || (r = this.config.anim);
   var n = this.getNode(e),
     o = this.getNodeElement(e);
@@ -5172,7 +5288,8 @@ FamilyTree._defaultConfig = function (e) {
       front: i
     }, a && a(o)
   }
-}, FamilyTree.prototype.magnifyBack = function (e, t, i) {
+};
+FamilyTree.prototype.magnifyBack = function (e, t, i) {
   t || (t = this.config.anim);
   var r = FamilyTree._magnify[e];
   if (r) {
@@ -5377,7 +5494,8 @@ FamilyTree._defaultConfig = function (e) {
 }, FamilyTree.input.isValidEmail = function (e) {
   e && (e = e.trim());
   return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(e).toLowerCase())
-}, FamilyTree.prototype.hideTreeMenu = function (e, t) {
+};
+FamilyTree.prototype.hideTreeMenu = function (e, t) {
   if (this._tree_menu_temp) {
     var i = this._tree_menu_temp;
     if (this.manager.oldNodes = this.nodes, this.nodes = i.nodes, this.manager.maxX = i.maxX, this.manager.maxY = i.maxY, this.manager.minX = i.minX, this.manager.minY = i.minY, this.manager.roots = i.roots, this.manager.nodes = i.nodes, this.manager.rootList = i.rootList, this.manager.visibleNodeIds = i.visibleNodeIds, this.manager.bordersByRootIdAndLevel = i.bordersByRootIdAndLevel, this.config.roots = i.config.roots, this.config.nodes = i.config.nodes, this._tree_menu_temp = null, e) {
@@ -5390,7 +5508,8 @@ FamilyTree._defaultConfig = function (e) {
       }))
     }
   }
-}, FamilyTree.prototype.showTreeMenu = function (e) {
+};
+FamilyTree.prototype.showTreeMenu = function (e) {
   null == e && console.error("Call addNode without id");
   var t = this.getNode(e);
   t || console.error("Cannot get node id: " + e);
@@ -5558,11 +5677,13 @@ FamilyTree._defaultConfig = function (e) {
   return this.on("field", (function (t, i) {
     return e.call(t, i)
   }))
-}, FamilyTree.prototype.onInit = function (e) {
+};
+FamilyTree.prototype.onInit = function (e) {
   return this.on("init", (function (t) {
     return e.call(t)
   }))
-}, FamilyTree.prototype.onUpdateNode = function (e) {
+};
+FamilyTree.prototype.onUpdateNode = function (e) {
   return this.on("update", (function (t, i, r) {
     var a = {
       oldData: i,
@@ -5570,7 +5691,8 @@ FamilyTree._defaultConfig = function (e) {
     };
     return e.call(t, a)
   }))
-}, FamilyTree.prototype.onRemoveNode = function (e) {
+};
+FamilyTree.prototype.onRemoveNode = function (e) {
   return this.on("remove", (function (t, i, r) {
     var a = {
       id: i,
@@ -5578,14 +5700,16 @@ FamilyTree._defaultConfig = function (e) {
     };
     return e.call(t, a)
   }))
-}, FamilyTree.prototype.onAddNode = function (e) {
+};
+FamilyTree.prototype.onAddNode = function (e) {
   return this.on("add", (function (t, i) {
     var r = {
       data: i
     };
     return e.call(t, r)
   }))
-}, FamilyTree.prototype.onExpandCollpaseButtonClick = function (e) {
+};
+FamilyTree.prototype.onExpandCollpaseButtonClick = function (e) {
   return this.on("expcollclick", (function (t, i, r, a) {
     var n = {
       collapsing: i,
@@ -5594,19 +5718,23 @@ FamilyTree._defaultConfig = function (e) {
     };
     return e.call(t, n)
   }))
-}, FamilyTree.prototype.onExporStart = function (e) {
+};
+FamilyTree.prototype.onExporStart = function (e) {
   return this.on("exportstart", (function (t, i) {
     return e.call(t, i)
   }))
-}, FamilyTree.prototype.onExporEnd = function (e) {
+};
+FamilyTree.prototype.onExporEnd = function (e) {
   return this.on("exportend", (function (t, i) {
     return e.call(t, i)
   }))
-}, FamilyTree.prototype.onNodeClick = function (e) {
+};
+FamilyTree.prototype.onNodeClick = function (e) {
   return this.on("click", (function (t, i) {
     return e.call(t, i)
   }))
-}, FamilyTree.prototype.onNodeDoubleClick = function (e) {
+};
+FamilyTree.prototype.onNodeDoubleClick = function (e) {
   return this.on("dbclick", (function (t, i) {
     var r = {
       data: i
@@ -5679,4 +5807,4 @@ FamilyTree._defaultConfig = function (e) {
     }()
   }
 };
-export default FamilyTree;
+// export default FamilyTree;
