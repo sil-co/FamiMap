@@ -1,23 +1,26 @@
-
+import {auth} from './firebase';
+import firebase from 'firebase/app';
+// import 'firebase/auth';
+import 'firebase/firestore';
+import {useAuthContext} from '../auth/AuthContext';
 
 const nodes = [
-  // {
-  //   id: 1,
-  //   pids: [],
+  {
+    id: 1,
+    pids: [3],
     // photo: 'https://cdn.balkan.app/shared/m60/2.jpg',
     // name: 'Zeph Daniels',
     // bdate: '1954-09-29',
     // ddate: '1990-01-02'
-  // },
+  },
   // {
   //   id: 2, pids: [3], gender: 'male', photo: 'https://cdn.balkan.app/shared/m60/1.jpg',
   //   name: 'Rowan Annable', bdate: '1952-10-10', email: 'Rowan@gmail.com', phone: '07084848888',
   //   history: '1952 My birthday. 1980 I marryed current wife. 1988 My friend was dead. 1990 I\'m happy',
-
   // },
   {
+    pids: [1],
     id: 3,
-    pids: [],
     // gender: 'female',
     // photo: 'https://cdn.balkan.app/shared/w60/1.jpg',
     // name: 'Laura Shepherd',

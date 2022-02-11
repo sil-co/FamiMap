@@ -172,9 +172,11 @@ FamilyTree._defaultConfig = function (e) {
     }
   }
 };
+
 FamilyTree.prototype.load = function (e) {
   return this.config.nodes = e, this._draw(!1, FamilyTree.action.init), this
 };
+
 FamilyTree.prototype.loadXML = function (e) {
   var t = FamilyTree._xml2json(e);
   return this.load(t)
@@ -671,7 +673,7 @@ FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
         };
         if (!1 !== this._fireUpdate_addUpdateRemove(d, a)) {
           console.log(5);
-          s
+
           var c = e;
           this.config.roots = [d.addNodesData[0].id], this._draw(!1, FamilyTree.action.insert, {
             id: c,
@@ -682,18 +684,21 @@ FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
 
           const db = firebase.firestore();
           const {currentUser} = firebase.auth();
-          if (!currentUser) {
-            const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-              if (user) {
-                // navigate('/');
-                console.log(currentUser);
-              }
-            })
-            // return unsubscribe;
-          }
+
           const ref = db.collection(`users/${currentUser.uid}/nodes`);
           ref.add({
-            text: 'first dataa',
+            // nodesに全て入れる
+              // nodes: [
+              //   {
+              //     id: i.id,
+              //     pids: [],
+              //     gender: i.gender,
+              //   },
+              // ]
+            // document管理をする
+            id: i.id,
+            pids: [],
+            gender: i.gender,
           })
             .then((docRef) => {
               console.log('success', docRef.id);
@@ -712,6 +717,7 @@ FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
     console.error("addParentNode invalid data");
   }
 };
+
 FamilyTree.prototype.canRemove = function (e) {
   var t = this.getNode(e);
   return !!t && (!(t.pids.length > 1) && !(t.childrenIds.length > 0))
@@ -3053,11 +3059,17 @@ FamilyTree.prototype.startMove = function (e, t) {
     }
   } else console.error("movePosition parameter not defined")
 };
+
 FamilyTree.prototype.stopMove = function () {
   this._moveInterval && (clearInterval(this._moveInterval), this._moveInterval = null, this._movePosition = null)
-}, void 0 === FamilyTree && (FamilyTree = {}), FamilyTree.node = function (e, t, i, r) {
+};
+
+void 0 === FamilyTree && (FamilyTree = {});
+
+FamilyTree.node = function (e, t, i, r) {
   this.templateName = r, this.id = e, this.pid = t, this.children = [], this.childrenIds = [], this.parent = null, this.stpid = null, this.stParent = null, this.stChildren = [], this.stChildrenIds = [], this.tags = i, this.tags || (this.tags = [])
 };
+
 FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
   var r = this;
   this.editUI.hide(), this.searchUI.hide(), this.nodeMenuUI.hide(), this.nodeContextMenuUI.hide(), this.menuUI.hide(), this.nodeCircleMenuUI.hide();
@@ -3113,7 +3125,9 @@ FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
       }), 0) : "pan" != s.type || r.config.sticky || r._draw(!0, FamilyTree.action.pan), s = null, d.style.display = "none", e.removeEventListener(i.move, h), e.removeEventListener(i.up, f), i.leave && e.removeEventListener(i.leave, f), i.touchstart && e.removeEventListener(i.touchstart, f)
     };
   e.addEventListener(i.move, h), e.addEventListener(i.up, f), i.leave && e.addEventListener(i.leave, f), i.touchstart && e.addEventListener(i.touchstart, f)
-}, FamilyTree.searchUI = function () {}, FamilyTree.searchUI.prototype.init = function (e) {
+};
+FamilyTree.searchUI = function () {};
+FamilyTree.searchUI.prototype.init = function (e) {
   this.obj = e;
   var t = this,
     i = document.createElement("div");
@@ -3145,11 +3159,14 @@ FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
         0 != FamilyTree.events.publish("searchclick", [t.obj, i]) && t.obj.center(i)
       }
     }
-}, FamilyTree.searchUI.prototype.hide = function () {
+};
+FamilyTree.searchUI.prototype.hide = function () {
   this.searchTableWrapper && (this.searchTableWrapper.innerHTML = ""), this.input && (this.input.value = "", this.input.focus(), this.input.blur())
-}, FamilyTree.searchUI.prototype.find = function (e) {
+};
+FamilyTree.searchUI.prototype.find = function (e) {
   this.input && (this.input.value = e, this._serverSearch(e), this.input.focus())
-}, FamilyTree.searchUI.prototype._serverSearch = function (e) {
+};
+FamilyTree.searchUI.prototype._serverSearch = function (e) {
   var t = this,
     i = FamilyTree._search.search(this.obj.config.nodes, e, this.obj.config.searchFields, this.obj.config.searchFields, this.obj.config.searchDisplayField, this.obj.config.searchFieldsWeight),
     r = FamilyTree._getFistImgField(this.obj.config),
@@ -3162,11 +3179,15 @@ FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
       e && e.removeAttribute("data-selected"), this.setAttribute("data-selected", "yes"), t.input.focus()
     }
   }))
-}, FamilyTree.searchUI.createItem = function (e, t, i, r) {
+};
+FamilyTree.searchUI.createItem = function (e, t, i, r) {
   return i && (i = "<b>" + i + "</b>"), `<tr data-search-item-id="${t}">\n                <td class="bft-search-image-td">\n                    ${e=e?`<div class="bft-search-photo" style="background-image: url(${e})"></div>`:`<div class="bft-search-photo">${FamilyTree.icon.user(32,32,"#aeaeae")}</div>`}\n                </td>\n                <td class="bft-search-text-td">${i} <br/>${r}</td>\n            </tr>`
-}, void 0 === FamilyTree && (FamilyTree = {}), FamilyTree.manager = function (e, t) {
+};
+void 0 === FamilyTree && (FamilyTree = {});
+FamilyTree.manager = function (e, t) {
   this.config = e, this.layoutConfigs = t, this.visibleNodeIds = [], this.viewBox = null, this.action = null, this.actionParams = null, this.nodes = {}, this.oldNodes = {}, this.maxX = null, this.maxY = null, this.minX = null, this.minY = null, this.bordersByRootIdAndLevel = null, this.roots = null, this.state = null, this.vbIsInitializedFromState = !1, this.rootList = []
-}, FamilyTree.manager.prototype.read = function (e, t, i, r, a, n, o, l) {
+};
+FamilyTree.manager.prototype.read = function (e, t, i, r, a, n, o, l) {
   var s = this;
   FamilyTree.state._get(this.config.state, t, i, (function (d) {
     s.state = d, s.action = a, s.actionParams = n, a != FamilyTree.action.init || !s.state || n && n.method && "fit" == n.method ? (s.viewBox = r, s.vbIsInitializedFromState = !1) : (s.viewBox = s.state.vb, s.vbIsInitializedFromState = !0);
@@ -3189,7 +3210,8 @@ FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
       r.notif = e.limit, r.roots = u, r.bordersByRootIdAndLevel = f, r.adjustify = e.adjustify, a != FamilyTree.action.exporting && (s.maxX = c, s.maxY = m, s.minX = p, s.minY = h, s.roots = u, s.nodes = y, s.visibleNodeIds = r.visibleNodeIds, s.bordersByRootIdAndLevel = f, s.rootList = e.rootList), o(r)
     }), l)
   }))
-}, FamilyTree.manager.prototype._read = function (e, t) {
+};
+FamilyTree.manager.prototype._read = function (e, t) {
   var i = this,
     r = FamilyTree.manager._createNodes(i.config, i.layoutConfigs, i.action, i.actionParams, i.oldNodes, i.state);
   t(r);
@@ -3834,7 +3856,9 @@ FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
     x: 0,
     y: 0
   }
-}, FamilyTree.manager.__createNodes = function (e, t, i, r, a, n, o) {
+};
+
+FamilyTree.manager.__createNodes = function (e, t, i, r, a, n, o) {
   for (var l = i.nodes, s = [], d = [], c = {}, m = {}, p = 0; p < l.length; p++) {
     var h, f = l[p];
     h = FamilyTree.STRING_TAGS ? f.tags ? f.tags.split(",") : [] : Array.isArray(f.tags) ? f.tags.slice(0) : [], f.gender && h.push(f.gender);
@@ -3871,7 +3895,9 @@ FamilyTree.prototype._mouseDownHandler = function (e, t, i) {
     for (p = o.length - 1; p >= 0; p--) i.roots.push(o[p][0])
   }
   for (p = 0; p < i.roots.length; p++) FamilyTree.manager._iterateFT(i.roots[p], m, c, e, n, t, r, a, i)
-}, FamilyTree.manager._iterateSetRootIds = function (e, t, i, r, a, n) {
+};
+
+FamilyTree.manager._iterateSetRootIds = function (e, t, i, r, a, n) {
   var o = a[e];
   if (o) {
     o.rids.has(t) || o.rids.push(t);
