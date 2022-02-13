@@ -51,12 +51,11 @@ export default function SignUp(props) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const {user} = userCredential;
-        console.log(user.uid);
+        // console.log(user.uid);
         // props.history.push('/');
         navigate('/');
       })
       .catch((error) => {
-        console.log(error.code, error.message);
         alert('A user ID is null or empty. The supplied email address is already in use. Not a valid password.')
       })
   };

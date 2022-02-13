@@ -22,9 +22,6 @@ const nodes =[
   //   id: 'jkl', gender: 'male', name: 'そう曽祖父'
   // },
 
-//   {id: 2, pids: [3], gender: 'male', name: '父'},
-// {id: 3, pids: [2], gender: 'female', name: '母'},
-// {id: 1, name: 'name', mid: 3, fid: 2},
 
 ]
 
