@@ -18,8 +18,12 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import {useNavigate} from 'react-router-dom';
 
-const pages = ['Share', 'Add', 'Remove'];
-const settings = ['Profile', 'Account', 'Dashboard'];
+import { getNodeList } from '../balkan/MyFamilyTree';
+
+// const pages = ['Share*', 'Blog*', 'List*'];
+const pages = [];
+// const settings = ['Profile*', 'Account*', 'Dashboard*'];
+const settings = [];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -50,6 +54,11 @@ const ResponsiveAppBar = () => {
         alert('Logout is faled.')
       });
   };
+
+  const clickSave = () => {
+    const nodeList = getNodeList();
+    // console.log(nodeList);
+  }
 
   return (
     <AppBar position="static">
@@ -147,6 +156,11 @@ const ResponsiveAppBar = () => {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
+              {
+                <MenuItem onClick={clickSave}>
+                <Typography textAlign="center">Save</Typography>
+              </MenuItem>
+              }
               {
                 <MenuItem onClick={clickLogout}>
                 <Typography textAlign="center">Logout</Typography>

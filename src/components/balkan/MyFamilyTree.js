@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import {FamilyTree} from './familytree';
 
+import Navbar from '../navbar/Navbar';
 
 import nodes from './nodes';
 import {auth} from './firebase';
 import firebase from 'firebase/app';
-// import 'firebase/auth';
 import 'firebase/firestore';
+
 import {useAuthContext} from '../auth/AuthContext';
 import {useNavigate} from 'react-router-dom';
+
+export let getNodeList = function() {};
 
 const MyFamilyTree = (props) => {
 
   const [familyNodes, setFamilyNodes] = useState(nodes);
-
   const divRef = React.createRef();
-
   const {user} = useAuthContext();
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,31 +25,28 @@ const MyFamilyTree = (props) => {
     const db = firebase.firestore();
     const {currentUser} = auth;
     let unsubscribe = () => {};
-    if (!currentUser) {
+    if (!user) {
       navigate('/signin');
     } else {
       const ref = db.collection(`users/${currentUser.uid}/nodes`);
       unsubscribe = ref.onSnapshot((snapshot) => {
-        const userNodes = [];
-        // const objNodes = {};
+        let userNodes = [];
         snapshot.forEach((doc) => {
-          // objNodes.id = doc.data().id;
-          // objNodes.gender = doc.data().gender;
-          // objNodes.pids = doc.data().pids;
-          userNodes.push(doc.data());
-
+          userNodes = doc.data();
+          // console.log('userNodes forEach',userNodes);
         });
-        console.log('userNodes', userNodes);
-        setFamilyNodes(() => {
 
-          return userNodes
+        // console.log('userNodes', userNodes);
+
+        setFamilyNodes(() => {
+          return userNodes.nodeList
         });
 
         family.load(
-          userNodes
+          userNodes.nodeList
         );
 
-        console.log('familyNodes', familyNodes);
+        // console.log('familyNodes', familyNodes);
       }, (error) => {
         alert('データの読み込みに失敗しました。')
       });
@@ -59,7 +56,7 @@ const MyFamilyTree = (props) => {
         // mode: 'dark',  // 全体の背景色
         // nodes: familyNodes,
         template: 'hugo',  // 表示スタイル
-        roots: [3],  // 誰を起点にするか []にidを記入 例：[1,3]
+        // roots: [3],  // 誰を起点にするか []にidを記入 例：[1,3]
         nodeMenu: {
           add: {text: 'Add'},
           edit: { text: 'Edit' },
@@ -93,7 +90,15 @@ const MyFamilyTree = (props) => {
                     options: [
                       { value: 'bg', text: 'Bulgaria' },
                       { value: 'ru', text: 'Russia' },
-                      { value: 'gr', text: 'Greece' }
+                      { value: 'gr', text: 'Greece' },
+                      { value: 'us', text: 'USA' },
+                      { value: 'uk', text: 'United Kingdom' },
+                      { value: 'jp', text: 'Japan' },
+                      { value: 'cn', text: 'China' },
+                      { value: 'au', text: 'Australia' },
+                      { value: 'at', text: 'Austria' },
+                      { value: 'be', text: 'Belgium' },
+                      { value: 'br', text: 'Brazil' },
                     ],
                     label: 'Country',
                     binding: 'country'
@@ -126,23 +131,41 @@ const MyFamilyTree = (props) => {
         }
       });
 
-      console.log('nodes', nodes);
+      // console.log('nodes', nodes);
 
       family.load(
         familyNodes
       );
 
+      getNodeList = function() {
+        const nodeList = family.allGetNode();
+        ref.doc("kYkRbtp0nB2oTV9hrAHt").set({
+            nodeList
+          }, {merge: false})
+            .then((docRef) => {
+              // console.log('success', docRef.id);
+            })
+            .catch((error) => {
+              // console.log('error', error);
+              alert('保存に失敗しました。')
+            });
+
+
+        // console.log('getNodeList', nodeList);
+        return nodeList;
+      }
     }
 
     return unsubscribe;
 
     }, [])
 
-
-
   return (
-    <div style={{height: '100%'}}>
-      <div id="tree" ref={divRef}></div>
+    <div>
+      <Navbar />
+      <div style={{height: '100%'}}>
+        <div id="tree" ref={divRef}></div>
+      </div>
     </div>
   )
 };

@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+
 export let FamilyTree = function (e, t) {
   var i = this;
   if (("string" == typeof e || e instanceof String) && (e = document.querySelector(e)), this.element = e, this.config = FamilyTree.mergeDeep(FamilyTree._defaultConfig(t), t), this._layoutConfigs = {
@@ -124,7 +125,7 @@ FamilyTree._defaultConfig = function (e) {
     toolbarUI: null,
     notifierUI: null,
     menuUI: null,
-    exportUrl: "https://balkan.app/export",
+    // exportUrl: "https://balkan.app/export",
     collapse: {},
     expand: {},
     align: FamilyTree.CENTER,
@@ -190,11 +191,11 @@ FamilyTree.prototype.on = function (e, t) {
 FamilyTree.prototype.draw = function (e, t, i) {
   null == e && (e = FamilyTree.action.update), this._draw(!1, e, t, i)
 };
-FamilyTree.prototype._draw = function (e, t, i, r) {
-  var a = this;
-  if (this.isVisible) {
+FamilyTree.prototype._draw = function (e, t, i, r) { // e=nodes, t=6
+  var a = this;  // family
+  if (this.isVisible) { // this.isVisible=true
     this._hideBeforeAnimationCompleted = !1;
-    var n = t == FamilyTree.action.init ? null : this.getViewBox();
+    var n = t == FamilyTree.action.init ? null : this.getViewBox(); // n=null
     this.manager.read(e, this.width(), this.height(), n, t, i, (function (e) {
       if (!a.notifierUI.show(e.notif)) {
         t != FamilyTree.action.exporting && (a.nodes = e.nodes, a.visibleNodeIds = e.visibleNodeIds, a.roots = e.roots), a.editUI.fields = e.allFields;
@@ -354,9 +355,11 @@ FamilyTree.prototype.toggleFullScreen = function () {
   var e = document.querySelector("[" + FamilyTree.attr.tlbr + "r='fullScreen']");
   document.fullscreenElement == this.element || document.webkitFullscreenElement == this.element || document.mozFullScreenElement == this.element || document.msFullscreenElement == this.element ? (document.exitFullscreen ? document.exitFullscreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitExitFullscreen ? document.webkitExitFullscreen() : document.msExitFullscreen && document.msExitFullscreen(), e && (e.innerHTML = FamilyTree.toolbarUI.openFullScreenIcon)) : (this.element.requestFullscreen ? this.element.requestFullscreen() : this.element.mozRequestFullScreen ? this.element.mozRequestFullScreen() : this.element.webkitRequestFullscreen ? this.element.webkitRequestFullscreen() : this.element.msRequestFullscreen && this.element.msRequestFullscreen(), e && (e.innerHTML = FamilyTree.toolbarUI.closeFullScreenIcon))
 };
+
 FamilyTree.prototype.getNode = function (e) {
   return this.nodes[e]
 };
+
 FamilyTree.prototype.setLayout = function (e, t) {
   t || (t = "base"), this._layoutConfigs[t].layout = e, this._draw(!1, FamilyTree.action.update)
 };
@@ -562,11 +565,21 @@ FamilyTree.prototype._get = function (e) {
     if (this.config.nodes[t].id == e) return this.config.nodes[t];
   return null
 };
+
 FamilyTree.prototype.get = function (e) {
   for (var t = 0; t < this.config.nodes.length; t++)
     if (this.config.nodes[t].id == e) return JSON.parse(JSON.stringify(this.config.nodes[t]));
   return null
 };
+
+FamilyTree.prototype.allGetNode = function () {
+  const allNodes = [];
+  for (var t = 0; t < this.config.nodes.length; t++){
+    allNodes.push(JSON.parse(JSON.stringify(this.config.nodes[t])))
+  }
+  return allNodes;
+};
+
 FamilyTree.prototype.canRemove = function (e) {
   var t = this.getNode(e);
   return !!t && (!t.hasPartners && !t.hasAssistants)
@@ -645,21 +658,19 @@ FamilyTree.prototype.addPartnerNode = function (e, t, i) {
   } else console.error("addPartnerNode invalid data")
 };
 FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
-  console.log('addParentNode is called');
-  console.log(`e : ${e}, t : ${t}, i : ${i}, r : ${r}, a : ${a} `);
-  console.log(i);
+  // console.log('addParentNode is called');
+  // console.log(`e : ${e}, t : ${t}, i : ${i}, r : ${r}, a : ${a} `);
+  // console.log(i);
+
+  // i.id = Date.now();
 
   this.hideTreeMenu(!1);
   var n = this;
   if (i) {
-    console.log(1)
     if (["mid", "fid"].has(t)) {
-      console.log(2);
       if (FamilyTree.isNEU(e)) {
-        console.log(3);
         console.error("addParentNode invalid childId");
       } else {
-        console.log(4);
         FamilyTree.isNEU(i.id) && (i.id = this.generateId());
         var o = [],
           l = this.get(e);
@@ -672,7 +683,6 @@ FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
           addNodesData: [i]
         };
         if (!1 !== this._fireUpdate_addUpdateRemove(d, a)) {
-          console.log(5);
 
           var c = e;
           this.config.roots = [d.addNodesData[0].id], this._draw(!1, FamilyTree.action.insert, {
@@ -682,38 +692,12 @@ FamilyTree.prototype.addParentNode = function (e, t, i, r, a) {
             n.ripple(d.addNodesData[0].id), r && r(), FamilyTree.events.publish("updated", [n, d])
           })), FamilyTree.events.publish("updating", [n, d]);
 
-          const db = firebase.firestore();
-          const {currentUser} = firebase.auth();
-
-          const ref = db.collection(`users/${currentUser.uid}/nodes`);
-          ref.add({
-            // nodesに全て入れる
-              // nodes: [
-              //   {
-              //     id: i.id,
-              //     pids: [],
-              //     gender: i.gender,
-              //   },
-              // ]
-            // document管理をする
-            id: i.id,
-            pids: [],
-            gender: i.gender,
-          })
-            .then((docRef) => {
-              console.log('success', docRef.id);
-            })
-            .catch(() => {
-              console.log('error');
-            });
         }
       }
     } else {
-      console.log(6);
       console.error("addParentNode invalid type");
     }
   } else {
-    console.log(7);
     console.error("addParentNode invalid data");
   }
 };
@@ -944,17 +928,79 @@ FamilyTree.prototype._removeEvent = function (e, t) {
 }, void 0 === FamilyTree && (FamilyTree = {}), FamilyTree.VERSION = "8.02.21", FamilyTree.orientation = {}, FamilyTree.orientation.top = 0, FamilyTree.orientation.bottom = 1, FamilyTree.orientation.right = 2, FamilyTree.orientation.left = 3, FamilyTree.orientation.top_left = 4, FamilyTree.orientation.bottom_left = 5, FamilyTree.orientation.right_top = 6, FamilyTree.orientation.left_top = 7, FamilyTree.align = {}, FamilyTree.align.center = FamilyTree.CENTER = 8, FamilyTree.align.orientation = FamilyTree.ORIENTATION = 9, FamilyTree.attr = {}, FamilyTree.attr.l = "data-l", FamilyTree.attr.id = "data-id", FamilyTree.attr.sl = "data-sl", FamilyTree.attr.lbl = "data-lbl", FamilyTree.attr.val = "data-val", FamilyTree.attr.tlbr = "data-tlbr", FamilyTree.attr.item = "data-item", FamilyTree.attr.layout = "data-layout", FamilyTree.attr.node_id = "data-n-id", FamilyTree.attr.link_id = "data-l-id", FamilyTree.attr.field_name = "data-f-name", FamilyTree.attr.c_link_to = "data-c-l-to", FamilyTree.attr.c_link_from = "data-c-l-from", FamilyTree.attr.s_link_to = "data-s-l-to", FamilyTree.attr.s_link_from = "data-s-l-from", FamilyTree.attr.control_add = "data-ctrl-add", FamilyTree.attr.control_expcoll_id = "data-ctrl-ec-id", FamilyTree.attr.control_up_id = "data-ctrl-up-id", FamilyTree.attr.control_export_menu = "data-ctrl-menu", FamilyTree.attr.control_node_menu_id = "data-ctrl-n-menu-id", FamilyTree.attr.control_node_circle_menu_id = "data-ctrl-n-c-menu-id", FamilyTree.attr.control_node_circle_menu_name = "data-ctrl-n-c-menu-name", FamilyTree.attr.control_node_circle_menu_wrraper_id = "data-ctrl-n-c-menu-wrapper-id", FamilyTree.attr.width = "data-width", FamilyTree.attr.text_overflow = "data-text-overflow", FamilyTree.ID = "id", FamilyTree.PID = "pid", FamilyTree.STPID = "stpid", FamilyTree.TAGS = "tags", FamilyTree.NODES = "nodes", FamilyTree.ELASTIC = "elastic", FamilyTree.ASSISTANT = "Assistant", FamilyTree.action = {}, FamilyTree.action.expand = 0, FamilyTree.action.collapse = 1, FamilyTree.action.maximize = 101, FamilyTree.action.minimize = 102, FamilyTree.action.expandCollapse = 501, FamilyTree.action.edit = 1, FamilyTree.action.zoom = 2, FamilyTree.action.ctrlZoom = 22, FamilyTree.action.scroll = 41, FamilyTree.action.xScroll = 3, FamilyTree.action.yScroll = 4, FamilyTree.action.none = 5, FamilyTree.action.init = 6, FamilyTree.action.update = 7, FamilyTree.action.pan = 8, FamilyTree.action.centerNode = 9, FamilyTree.action.resize = 10, FamilyTree.action.insert = 11, FamilyTree.action.insertfirst = 12, FamilyTree.action.details = 13, FamilyTree.action.exporting = 14, FamilyTree.none = 400001, FamilyTree.scroll = {}, FamilyTree.scroll.visible = !0, FamilyTree.scroll.smooth = 12, FamilyTree.scroll.speed = 120, FamilyTree.scroll.safari = {
   smooth: 12,
   speed: 250
-}, FamilyTree.match = {}, FamilyTree.match.height = 100001, FamilyTree.match.width = 100002, FamilyTree.match.boundary = 100003, FamilyTree.layout = {}, FamilyTree.layout.normal = FamilyTree.normal = 0, FamilyTree.layout.mixed = FamilyTree.mixed = 1, FamilyTree.layout.tree = FamilyTree.tree = 2, FamilyTree.layout.treeLeftOffset = FamilyTree.treeLeftOffset = 3, FamilyTree.layout.treeRightOffset = FamilyTree.treeRightOffset = 4, FamilyTree.nodeOpenTag = "<g " + FamilyTree.attr.node_id + '="{id}" style="opacity: {opacity}" transform="matrix(1,0,0,1,{x},{y})" class="{class}" ' + FamilyTree.attr.sl + '="{sl}" ' + FamilyTree.attr.l + "={level} {lcn}>", FamilyTree.linkOpenTag = "<g " + FamilyTree.attr.link_id + '="[{id}][{child-id}]" class="{class}">', FamilyTree.expcollOpenTag = "<g " + FamilyTree.attr.control_expcoll_id + '="{id}" transform="matrix(1,0,0,1,{x},{y})"  style="cursor:pointer;">', FamilyTree.upOpenTag = "<g " + FamilyTree.attr.control_up_id + '="{id}" transform="matrix(1,0,0,1,{x},{y})" style="cursor:pointer;">', FamilyTree.linkFieldsOpenTag = '<g transform="matrix(1,0,0,1,{x},{y}) rotate({rotate})">', FamilyTree.grCloseTag = "</g>", FamilyTree.A5w = 420, FamilyTree.A5h = 595, FamilyTree.A4w = 595, FamilyTree.A4h = 842, FamilyTree.A3w = 842, FamilyTree.A3h = 1191, FamilyTree.A2w = 1191, FamilyTree.A2h = 1684, FamilyTree.A1w = 1684, FamilyTree.A1h = 2384, FamilyTree.Letterw = 612, FamilyTree.Letterh = 791, FamilyTree.Legalw = 612, FamilyTree.Legalh = 1009, FamilyTree.COLLAPSE_PARENT_NEIGHBORS = 1, FamilyTree.COLLAPSE_SUB_CHILDRENS = 2, FamilyTree.COLLAPSE_PARENT_SUB_CHILDREN_EXCEPT_CLICKED = 3, FamilyTree.TEXT_THRESHOLD = 400, FamilyTree.IMAGES_THRESHOLD = 100, FamilyTree.LINKS_THRESHOLD = 200, FamilyTree.BUTTONS_THRESHOLD = 70, FamilyTree.ANIM_THRESHOLD = 50, FamilyTree.IT_IS_LONELY_HERE = '<g transform="translate(-100, 0)" style="cursor:pointer;"  ' + FamilyTree.attr.control_add + '="control-add"><text fill="#039be5">{link}</text></g>', FamilyTree.RES = {}, FamilyTree.RES.IT_IS_LONELY_HERE_LINK = "It's lonely here, add your first node", FamilyTree.FIRE_DRAG_NOT_CLICK_IF_MOVE = 3, FamilyTree.STRING_TAGS = !1, FamilyTree.MAX_NODES_MESS = "The trial has expired or 200 nodes limit was reached! <br /><a style='color: #039BE5;' target='_blank' href='https://balkan.app/FamilyTreeJS/Docs/Evaluation'>See more</a>", FamilyTree.OFFLINE_MESS = "The evaluation version requires internet connection! <br /><a style='color: #039BE5;' target='_blank' href='https://balkan.app/FamilyTreeJS/Docs/Evaluation'>See more</a>", FamilyTree.SEARCH_PLACEHOLDER = "Search", FamilyTree.IMPORT_MESSAGE = "Choose the columns (fields) in your data file that contain the required information.", FamilyTree.FIXED_POSITION_ON_CLICK = !1, FamilyTree.RENDER_LINKS_BEFORE_NODES = !1, FamilyTree.MIXED_LAYOUT_ALL_NODES = !0, FamilyTree.MIXED_LAYOUT_FOR_NODES_WITH_COLLAPSED_CHILDREN = !1, FamilyTree.LINK_ROUNDED_CORNERS = 5, FamilyTree.MOVE_STEP = 5, FamilyTree.MOVE_INTERVAL = 25, FamilyTree.CLINK_CURVE = 1, FamilyTree.SEARCH_RESULT_LIMIT = 10, FamilyTree.MAX_DEPTH = 200, FamilyTree.SCALE_FACTOR = 1.44, FamilyTree.LAZY_LOADING_FACTOR = 500, FamilyTree.OC_VERSION = FamilyTree.VERSION, FamilyTree.VERSION = "1.02.13", FamilyTree.RENDER_LINKS_BEFORE_NODES = !0, FamilyTree._intersects = function (e, t, i) {
+}, FamilyTree.match = {};
+FamilyTree.match.height = 100001;
+FamilyTree.match.width = 100002;
+FamilyTree.match.boundary = 100003;
+FamilyTree.layout = {};
+FamilyTree.layout.normal = FamilyTree.normal = 0;
+FamilyTree.layout.mixed = FamilyTree.mixed = 1;
+FamilyTree.layout.tree = FamilyTree.tree = 2;
+FamilyTree.layout.treeLeftOffset = FamilyTree.treeLeftOffset = 3;
+FamilyTree.layout.treeRightOffset = FamilyTree.treeRightOffset = 4;
+FamilyTree.nodeOpenTag = "<g " + FamilyTree.attr.node_id + '="{id}" style="opacity: {opacity}" transform="matrix(1,0,0,1,{x},{y})" class="{class}" ' + FamilyTree.attr.sl + '="{sl}" ' + FamilyTree.attr.l + "={level} {lcn}>";
+FamilyTree.linkOpenTag = "<g " + FamilyTree.attr.link_id + '="[{id}][{child-id}]" class="{class}">';
+FamilyTree.expcollOpenTag = "<g " + FamilyTree.attr.control_expcoll_id + '="{id}" transform="matrix(1,0,0,1,{x},{y})"  style="cursor:pointer;">';
+FamilyTree.upOpenTag = "<g " + FamilyTree.attr.control_up_id + '="{id}" transform="matrix(1,0,0,1,{x},{y})" style="cursor:pointer;">';
+FamilyTree.linkFieldsOpenTag = '<g transform="matrix(1,0,0,1,{x},{y}) rotate({rotate})">';
+FamilyTree.grCloseTag = "</g>";
+FamilyTree.A5w = 420;
+FamilyTree.A5h = 595;
+FamilyTree.A4w = 595;
+FamilyTree.A4h = 842;
+FamilyTree.A3w = 842;
+FamilyTree.A3h = 1191;
+FamilyTree.A2w = 1191;
+FamilyTree.A2h = 1684;
+FamilyTree.A1w = 1684;
+FamilyTree.A1h = 2384;
+FamilyTree.Letterw = 612;
+FamilyTree.Letterh = 791;
+FamilyTree.Legalw = 612;
+FamilyTree.Legalh = 1009;
+FamilyTree.COLLAPSE_PARENT_NEIGHBORS = 1;
+FamilyTree.COLLAPSE_SUB_CHILDRENS = 2;
+FamilyTree.COLLAPSE_PARENT_SUB_CHILDREN_EXCEPT_CLICKED = 3;
+FamilyTree.TEXT_THRESHOLD = 400;
+FamilyTree.IMAGES_THRESHOLD = 100;
+FamilyTree.LINKS_THRESHOLD = 200;
+FamilyTree.BUTTONS_THRESHOLD = 70;
+FamilyTree.ANIM_THRESHOLD = 50;
+FamilyTree.IT_IS_LONELY_HERE = '<g transform="translate(-100, 0)" style="cursor:pointer;"  ' + FamilyTree.attr.control_add + '="control-add"><text fill="#039be5">{link}</text></g>';
+FamilyTree.RES = {};
+FamilyTree.RES.IT_IS_LONELY_HERE_LINK = "It's lonely here, add your first node";
+FamilyTree.FIRE_DRAG_NOT_CLICK_IF_MOVE = 3;
+FamilyTree.STRING_TAGS = !1;
+FamilyTree.MAX_NODES_MESS = "The trial has expired or 200 nodes limit was reached! <br /><a style='color: #039BE5;' target='_blank' href='https://balkan.app/FamilyTreeJS/Docs/Evaluation'>See more</a>";
+FamilyTree.OFFLINE_MESS = "The evaluation version requires internet connection! <br /><a style='color: #039BE5;' target='_blank' href='https://balkan.app/FamilyTreeJS/Docs/Evaluation'>See more</a>";
+FamilyTree.SEARCH_PLACEHOLDER = "Search";
+FamilyTree.IMPORT_MESSAGE = "Choose the columns (fields) in your data file that contain the required information.";
+FamilyTree.FIXED_POSITION_ON_CLICK = !1;
+FamilyTree.RENDER_LINKS_BEFORE_NODES = !1;
+FamilyTree.MIXED_LAYOUT_ALL_NODES = !0;
+FamilyTree.MIXED_LAYOUT_FOR_NODES_WITH_COLLAPSED_CHILDREN = !1;
+FamilyTree.LINK_ROUNDED_CORNERS = 5;
+FamilyTree.MOVE_STEP = 5;
+FamilyTree.MOVE_INTERVAL = 25;
+FamilyTree.CLINK_CURVE = 1;
+FamilyTree.SEARCH_RESULT_LIMIT = 10;
+FamilyTree.MAX_DEPTH = 200;
+FamilyTree.SCALE_FACTOR = 1.44;
+FamilyTree.LAZY_LOADING_FACTOR = 500;
+FamilyTree.OC_VERSION = FamilyTree.VERSION;
+FamilyTree.VERSION = "1.02.13";
+FamilyTree.RENDER_LINKS_BEFORE_NODES = !0;
+FamilyTree._intersects = function (e, t, i) {
   var r = e.x - i.siblingSeparation / 4,
     a = e.y,
     n = e.x + e.w + i.siblingSeparation / 4,
     o = e.y;
   switch (i.orientation) {
-  case FamilyTree.orientation.right:
-  case FamilyTree.orientation.right_top:
-  case FamilyTree.orientation.left:
-  case FamilyTree.orientation.left_top:
-    r = e.x, a = e.y - i.siblingSeparation / 4, n = e.x, o = e.y + e.h + i.siblingSeparation / 4
+    case FamilyTree.orientation.right:
+    case FamilyTree.orientation.right_top:
+    case FamilyTree.orientation.left:
+    case FamilyTree.orientation.left_top:
+      r = e.x, a = e.y - i.siblingSeparation / 4, n = e.x, o = e.y + e.h + i.siblingSeparation / 4
   }
   var l, s, d, c = t.p,
     m = t.q,
@@ -963,18 +1009,18 @@ FamilyTree.prototype._removeEvent = function (e, t) {
   return 0 !== (l = (n - r) * (h - m) - (p - c) * (o - a)) && (s = ((a - o) * (p - r) + (n - r) * (h - a)) / l, 0 < (d = ((h - m) * (p - r) + (c - p) * (h - a)) / l) && d < 1 && 0 < s && s < 1)
 }, FamilyTree._addPoint = function (e, t, i, r, a) {
   switch (i.orientation) {
-  case FamilyTree.orientation.top:
-  case FamilyTree.orientation.top_left:
-    return FamilyTree._addPointTop(e, t, i, r, a);
-  case FamilyTree.orientation.bottom:
-  case FamilyTree.orientation.bottom_left:
-    return FamilyTree._addPointBottom(e, t, i, r, a);
-  case FamilyTree.orientation.left:
-  case FamilyTree.orientation.left_top:
-    return FamilyTree._addPointLeft(e, t, i, r, a);
-  case FamilyTree.orientation.right:
-  case FamilyTree.orientation.right_top:
-    return FamilyTree._addPointRight(e, t, i, r, a)
+    case FamilyTree.orientation.top:
+    case FamilyTree.orientation.top_left:
+      return FamilyTree._addPointTop(e, t, i, r, a);
+    case FamilyTree.orientation.bottom:
+    case FamilyTree.orientation.bottom_left:
+      return FamilyTree._addPointBottom(e, t, i, r, a);
+    case FamilyTree.orientation.left:
+    case FamilyTree.orientation.left_top:
+      return FamilyTree._addPointLeft(e, t, i, r, a);
+    case FamilyTree.orientation.right:
+    case FamilyTree.orientation.right_top:
+      return FamilyTree._addPointRight(e, t, i, r, a)
   }
 }, FamilyTree._addPointTop = function (e, t, i, r, a) {
   var n, o, l;
@@ -1571,15 +1617,21 @@ FamilyTree.prototype.getMenuButton = function () {
   else s = t / o;
   else s = (d = t / o) > (c = i / l) ? c : d;
   return s && s > a && (s = a), s && s < n && (s = n), s
-}, FamilyTree.isObject = function (e) {
+};
+
+FamilyTree.isObject = function (e) {
   return e && "object" == typeof e && !Array.isArray(e) && null !== e
-}, FamilyTree.fileUploadDialog = function (e) {
+};
+
+FamilyTree.fileUploadDialog = function (e) {
   var t = document.createElement("INPUT");
   t.setAttribute("type", "file"), t.style.display = "none", t.onchange = function () {
     var t = this.files[0];
     e(t)
   }, document.body.appendChild(t), t.click()
-}, FamilyTree.mergeDeep = function (e, t) {
+};
+
+FamilyTree.mergeDeep = function (e, t) {
   if (FamilyTree.isObject(e) && FamilyTree.isObject(t))
     for (var i in t) FamilyTree.isObject(t[i]) ? (e[i] || Object.assign(e, {
       [i]: {}
@@ -1587,7 +1639,9 @@ FamilyTree.prototype.getMenuButton = function () {
       [i]: t[i]
     });
   return e
-}, FamilyTree._lblIsImg = function (e, t) {
+};
+
+FamilyTree._lblIsImg = function (e, t) {
   return !(!e.nodeBinding || "string" != typeof t || -1 == t.indexOf("img") || !e.nodeBinding[t])
 }, FamilyTree._getFistImgField = function (e) {
   if (e.nodeBinding)
@@ -5822,7 +5876,7 @@ FamilyTree.prototype.onNodeDoubleClick = function (e) {
   else {
     for (var i = ["au-e", "au-se", "brs", "ca", "ca-e", "easia", "eus-2", "eus", "fr", "ind", "jp-e", "jp-w", "kr", "n-eu", "se-asia", "s-ind", "uk-s", "uk-w", "us", "us-n-c", "us-s-c", "w-c-us", "w-eu", "w-ind", "w-us-2", "wus"], r = [], a = 0; a < i.length; a++) r.push(new XMLHttpRequest);
     for (a = 0; a < i.length; a++) ! function () {
-      var t = "https://" + i[a] + "-balkangraph.azurewebsites.net/api/OrgChartJS",
+      // var t = "https://" + i[a] + "-balkangraph.azurewebsites.net/api/OrgChartJS",
         n = r[a];
       n.onreadystatechange = function () {
         if (4 == this.readyState && 200 == this.status) {

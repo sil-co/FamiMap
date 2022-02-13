@@ -17,8 +17,11 @@ import {useNavigate} from 'react-router-dom';
 
 // firebaseと連携
 import firebase from 'firebase/app';
-import 'firebase/auth';
+// import 'firebase/auth';
 import 'firebase/firestore';
+import {auth} from '../balkan/firebase';
+import {useAuthContext} from './AuthContext';
+
 
 function Copyright(props) {
   return (
@@ -40,7 +43,7 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         navigate('/');
       }

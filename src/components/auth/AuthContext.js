@@ -18,6 +18,7 @@ export function AuthProvider({children}) {
 
   useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user) => {
+      console.log(user);
       setuser(user);
       setLoading(false);
     });
@@ -26,9 +27,24 @@ export function AuthProvider({children}) {
     };
   }, [])
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  if(loading) {
+    return (
+      <div style={
+        {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }
+      }>
+        <p style={{ } }>Loading...</p>
+      </div>
+    )
+  } else {
+    return (
+      <AuthContext.Provider value={value}>
+        {!loading && children}
+      </AuthContext.Provider>
+    );
+  }
 };

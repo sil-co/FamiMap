@@ -1,58 +1,30 @@
-import {auth} from './firebase';
-import firebase from 'firebase/app';
-// import 'firebase/auth';
-import 'firebase/firestore';
-import {useAuthContext} from '../auth/AuthContext';
 
-const nodes = [
-  {
-    id: 1,
-    pids: [3],
-    // photo: 'https://cdn.balkan.app/shared/m60/2.jpg',
-    // name: 'Zeph Daniels',
-    // bdate: '1954-09-29',
-    // ddate: '1990-01-02'
-  },
-  // {
-  //   id: 2, pids: [3], gender: 'male', photo: 'https://cdn.balkan.app/shared/m60/1.jpg',
-  //   name: 'Rowan Annable', bdate: '1952-10-10', email: 'Rowan@gmail.com', phone: '07084848888',
-  //   history: '1952 My birthday. 1980 I marryed current wife. 1988 My friend was dead. 1990 I\'m happy',
+
+const nodes =[
+
+  // { id: '_kkk', pids: ['idjskhfskla'], gender: 'male', name: '父'
   // },
-  {
-    pids: [1],
-    id: 3,
-    // gender: 'female',
-    // photo: 'https://cdn.balkan.app/shared/w60/1.jpg',
-    // name: 'Laura Shepherd',
-    // bdate: '1943-01-13',
-    // email: 'laura.shepherd@gmail.com',
-    // phone: '+44 845 5752 547',
-    // city: 'Moscow',
-    // country: 'ru'
-  },
-  // {
-  //   id: 4, pids: [5], gender: 'male', photo: 'https://cdn.balkan.app/shared/m60/3.jpg',
-  //   name: 'Rowan Annable'
+  // { id: '_idk8_', pids: ['kdh'], gender: 'female', name: '祖母', mid: 'jkl',
+  // },
+  // { id: 'idjskhfskla', mid: '_idk8_', fid: 'kdh', pids: ['_kkk'], gender: 'female', name: '母'
+  // },
+  // { id: 'kdh', pids: ['_idk8_'],  gender: 'male', name: '祖父', mid: 'kdhiuh', fid: 'ad__'
+  // },
+  // { id: 'jjjjj', mid: 'idjskhfskla', fid: '_kkk', gender: 'female', name: '本人', pids: [],
   // },
   // {
-  //   id: 5, pids: [4], gender: 'female', photo: 'https://cdn.balkan.app/shared/w60/3.jpg',
-  //   name: 'Lois Sowle'
+  //   id: 'kdhiuh', gender: 'female', name: '祖父方曽祖母', pids: ['ad__'],
   // },
   // {
-  //   id: 6, mid: 2, fid: 3, pids: [7], gender: 'female', photo: 'https://cdn.balkan.app/shared/w30/1.jpg',
-  //   name: 'Tyler Heath', bdate: '1975-11-12'
+  //   id: 'ad__', gender: 'male', name: '祖父方曽祖父', pids: ['kdhiuh'],
   // },
   // {
-  //   id: 7, pids: [6], mid: 5, fid: 4, gender: 'male', photo: 'https://cdn.balkan.app/shared/m30/3.jpg',
-  //   name: 'Samson Stokes', bdate: '1986-10-01'
+  //   id: 'jkl', gender: 'male', name: 'そう曽祖父'
   // },
-  // {
-  //   id: 8, mid: 7, fid: 6, gender: 'female', photo: 'https://cdn.balkan.app/shared/w10/3.jpg',
-  //   name: 'Celeste Castillo', bdate: '2021-02-01'
-  // },
-  // {
-  //   id: 9, mid: 7, fid: 6, gender: 'male', name: 'Justin bieber', bdate: '1991-02-04', ddate: '1992-02-04'
-  // },
+
+//   {id: 2, pids: [3], gender: 'male', name: '父'},
+// {id: 3, pids: [2], gender: 'female', name: '母'},
+// {id: 1, name: 'name', mid: 3, fid: 2},
 
 ]
 
