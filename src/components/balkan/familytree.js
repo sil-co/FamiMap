@@ -2,11 +2,6 @@
 /* eslint no-undef: "off" */
 /* eslint no-restricted-globals: "off" */
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
-
-
 export let FamilyTree = function (e, t) {
   var i = this;
   if (("string" == typeof e || e instanceof String) && (e = document.querySelector(e)), this.element = e, this.config = FamilyTree.mergeDeep(FamilyTree._defaultConfig(t), t), this._layoutConfigs = {

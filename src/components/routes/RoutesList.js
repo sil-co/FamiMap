@@ -12,8 +12,8 @@ const RoutesList = (props) => {
         <Routes>
           <Route path='/signin' element={<SignIn />} />
           <Route path='/signup' element={<SignUp />} />
-          <Route path='/' element={<MyFamilyTree />} />
-          <Route path='/lp' element={<Lp />} />
+          <Route path='/home' element={<MyFamilyTree />} />
+          <Route path='/' element={<Lp />} />
         </Routes>
       </Router>
   );

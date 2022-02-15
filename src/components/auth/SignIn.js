@@ -20,15 +20,15 @@ import firebase from 'firebase/app';
 // import 'firebase/auth';
 import 'firebase/firestore';
 import {auth} from '../balkan/firebase';
-import {useAuthContext} from './AuthContext';
+// import {useAuthContext} from './AuthContext';
 
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        FamiMap
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -45,7 +45,7 @@ export default function SignIn() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigate('/');
+        navigate('/home');
       }
     })
     return unsubscribe;

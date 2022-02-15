@@ -22,7 +22,6 @@ const nodes =[
   //   id: 'jkl', gender: 'male', name: 'そう曽祖父'
   // },
 
-
 ]
 
 export default nodes;

@@ -26,8 +26,8 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <MuiLink color="inherit" href="https://mui.com/">
-        Your Website
+      <MuiLink color="inherit" href="/">
+        FamiMap
       </MuiLink>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -50,10 +50,10 @@ export default function SignUp(props) {
     const password = data.get('password');
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        const {user} = userCredential;
+        // const {user} = userCredential;
         // console.log(user.uid);
         // props.history.push('/');
-        navigate('/');
+        navigate('/home');
       })
       .catch((error) => {
         alert('A user ID is null or empty. The supplied email address is already in use. Not a valid password.')
