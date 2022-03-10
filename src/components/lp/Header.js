@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, IconButton, Toolbar, Collapse, Button } from '@material-ui/core';
-import SortIcon from '@material-ui/icons/Sort';
+// import SortIcon from '@material-ui/icons/Sort';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Link as Scroll } from 'react-scroll';
 import {useNavigate} from 'react-router-dom';
@@ -68,7 +68,7 @@ export default function Header() {
           </h1>
           <IconButton onClick={handleNavigate}>
             {/* <SortIcon className={classes.icon} /> */}
-            <div className={classes.sign} >Signin/Singup</div>
+            <div className={classes.sign} >ログイン/新規登録</div>
           </IconButton>
         </Toolbar>
       </AppBar>

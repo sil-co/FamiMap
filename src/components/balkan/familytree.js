@@ -120,7 +120,7 @@ FamilyTree._defaultConfig = function (e) {
     toolbarUI: null,
     notifierUI: null,
     menuUI: null,
-    // exportUrl: "https://balkan.app/export",
+    exportUrl: "https://balkan.app/export",
     collapse: {},
     expand: {},
     align: FamilyTree.CENTER,
@@ -5871,7 +5871,7 @@ FamilyTree.prototype.onNodeDoubleClick = function (e) {
   else {
     for (var i = ["au-e", "au-se", "brs", "ca", "ca-e", "easia", "eus-2", "eus", "fr", "ind", "jp-e", "jp-w", "kr", "n-eu", "se-asia", "s-ind", "uk-s", "uk-w", "us", "us-n-c", "us-s-c", "w-c-us", "w-eu", "w-ind", "w-us-2", "wus"], r = [], a = 0; a < i.length; a++) r.push(new XMLHttpRequest);
     for (a = 0; a < i.length; a++) ! function () {
-      // var t = "https://" + i[a] + "-balkangraph.azurewebsites.net/api/OrgChartJS",
+      var t = "https://" + i[a] + "-balkangraph.azurewebsites.net/api/OrgChartJS",
         n = r[a];
       n.onreadystatechange = function () {
         if (4 == this.readyState && 200 == this.status) {
@@ -5882,4 +5882,3 @@ FamilyTree.prototype.onNodeDoubleClick = function (e) {
     }()
   }
 };
-// export default FamilyTree;

@@ -19,7 +19,7 @@ import {useNavigate} from 'react-router-dom';
 import firebase from 'firebase/app';
 // import 'firebase/auth';
 import 'firebase/firestore';
-import {auth} from '../balkan/firebase';
+import auth from '../balkan/firebaseConfig';
 // import {useAuthContext} from './AuthContext';
 
 
@@ -60,7 +60,7 @@ export default function SignIn() {
       .then((userCredential) => {
         const {user} = userCredential;
         console.log((user.uid));
-        navigate('/');
+        navigate('/home');
       })
       .catch((error) => {
         alert('A user ID is null or empty. The supplied email address is already in use. Not a valid password')
@@ -87,7 +87,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log in
+            ログイン
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -120,7 +120,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Log In
+              ログイン
             </Button>
             <Grid container>
               <Grid item xs>

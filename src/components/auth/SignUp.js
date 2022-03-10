@@ -20,7 +20,6 @@ import {useNavigate} from 'react-router-dom';
 // firebaseと連携する
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/firestore';
 
 function Copyright(props) {
   return (
@@ -76,7 +75,7 @@ export default function SignUp(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            新規登録
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -138,13 +137,13 @@ export default function SignUp(props) {
                 sx={{ mt: 3, mb: 2 }}
                 // href='/'
               >
-                Sign Up
+                新規登録
               </Button>
 
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <MuiLink href="/signin" variant="body2">
-                  Already have an account? Sign in
+                  既に登録済みの方
                 </MuiLink>
               </Grid>
             </Grid>

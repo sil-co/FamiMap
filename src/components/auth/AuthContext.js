@@ -1,5 +1,5 @@
 import {createContext, useState, useContext, useEffect} from 'react';
-import {auth} from '../balkan/firebase';
+import auth from '../balkan/firebaseConfig';
 
 const AuthContext = createContext();
 
@@ -22,9 +22,7 @@ export function AuthProvider({children}) {
       setuser(user);
       setLoading(false);
     });
-    return () => {
-      unsubscribed();
-    };
+    return unsubscribed;
   }, [])
 
   if(loading) {

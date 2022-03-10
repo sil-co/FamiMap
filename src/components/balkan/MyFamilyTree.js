@@ -4,7 +4,7 @@ import {FamilyTree} from './familytree';
 import Navbar from '../navbar/Navbar';
 
 import nodes from './nodes';
-import {auth} from './firebase';
+import auth from './firebaseConfig';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
