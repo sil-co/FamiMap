@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
   },
 }));
+
 export default function Lp() {
   const classes = useStyles();
   return (

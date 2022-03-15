@@ -75,7 +75,7 @@ export default function SignUp(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            新規登録
+            Sign Up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -137,13 +137,13 @@ export default function SignUp(props) {
                 sx={{ mt: 3, mb: 2 }}
                 // href='/'
               >
-                新規登録
+                Sign Up
               </Button>
 
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <MuiLink href="/signin" variant="body2">
-                  既に登録済みの方
+                  Already have an account? Sign in
                 </MuiLink>
               </Grid>
             </Grid>

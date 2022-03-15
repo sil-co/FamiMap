@@ -47,18 +47,20 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
   }
 }));
+
 export default function Header() {
   const navigate = useNavigate();
   const classes = useStyles();
   const [checked, setChecked] = useState(false);
 
   const handleNavigate = () => {
-    navigate('/signin');
+    navigate('/map');
   }
 
   useEffect(() => {
     setChecked(true);
   }, []);
+
   return (
     <div className={classes.root} id="header">
       <AppBar className={classes.appbar} elevation={0}>
@@ -68,7 +70,7 @@ export default function Header() {
           </h1>
           <IconButton onClick={handleNavigate}>
             {/* <SortIcon className={classes.icon} /> */}
-            <div className={classes.sign} >ログイン/新規登録</div>
+            <div className={classes.sign}>TRY OUT</div>
           </IconButton>
         </Toolbar>
       </AppBar>

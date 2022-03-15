@@ -22,6 +22,13 @@ const nodes =[
   //   id: 'jkl', gender: 'male', name: 'そう曽祖父'
   // },
 
+  { id: '_kkk', pids: ['idjskhfskla'], gender: 'male', name: 'Dad'
+  },
+  { id: 'idjskhfskla', pids: ['_kkk'], gender: 'female', name: 'Mom'
+  },
+  { id: 'jjjjj', mid: 'idjskhfskla', fid: '_kkk', gender: 'female', name: 'You', pids: [],
+  },
+
 ]
 
 export default nodes;

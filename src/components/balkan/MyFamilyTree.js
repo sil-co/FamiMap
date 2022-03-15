@@ -1,57 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import {FamilyTree} from './familytree';
-
 import Navbar from '../navbar/Navbar';
-
 import nodes from './nodes';
-import auth from './firebaseConfig';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-
-import {useAuthContext} from '../auth/AuthContext';
-import {useNavigate} from 'react-router-dom';
+import "./myfamilytree.scss";
+import SdStorageIcon from '@material-ui/icons/SdStorage';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+// import auth from './firebaseConfig';
+// import firebase from 'firebase/app';
+// import 'firebase/firestore';
+// import {useAuthContext} from '../auth/AuthContext';
+// import {useNavigate} from 'react-router-dom';
 
 export let getNodeList = function() {};
 
 const MyFamilyTree = (props) => {
 
-  const [familyNodes, setFamilyNodes] = useState(nodes);
   const divRef = React.createRef();
-  const {user} = useAuthContext();
-  const navigate = useNavigate();
+
+  const [family, setFamily] = useState({});
+
+  // firebase user情報
+  // const {user} = useAuthContext();
+  // signin signup画面へのnavigate
+  // const navigate = useNavigate();
 
   useEffect(() => {
+    // firebase認証
+    // const db = firebase.firestore();
+    // const {currentUser} = auth;
+    // let unsubscribe = () => {};
+    // if (!user) {
+    //   navigate('/signin');
+    // } else {
+    //   const ref = db.collection(`users/${currentUser.uid}/nodes`);
+    //   unsubscribe = ref.onSnapshot((snapshot) => {
+    //     let userNodes = [];
+    //     snapshot.forEach((doc) => {
+    //       userNodes = doc.data();
+    //     });
+    //     setFamilyNodes(() => {
+    //       return userNodes.nodeList
+    //     });
+    //     family.load(
+    //       userNodes.nodeList
+    //     );
+    //   }, (error) => {
+    //     alert('データの読み込みに失敗しました。')
+    //   });
+    // }
+    // return unsubscribe;
 
-    const db = firebase.firestore();
-    const {currentUser} = auth;
-    let unsubscribe = () => {};
-    if (!user) {
-      navigate('/signin');
-    } else {
-      const ref = db.collection(`users/${currentUser.uid}/nodes`);
-      unsubscribe = ref.onSnapshot((snapshot) => {
-        let userNodes = [];
-        snapshot.forEach((doc) => {
-          userNodes = doc.data();
-          // console.log('userNodes forEach',userNodes);
-        });
-
-        // console.log('userNodes', userNodes);
-
-        setFamilyNodes(() => {
-          return userNodes.nodeList
-        });
-
-        family.load(
-          userNodes.nodeList
-        );
-
-        // console.log('familyNodes', familyNodes);
-      }, (error) => {
-        alert('データの読み込みに失敗しました。')
-      });
-
-      const family = new FamilyTree(divRef.current, {
+      setFamily(new FamilyTree(divRef.current, {
         // mouseScrool: FamilyTree.none,  // zoom panをマウスでできるかどうかの指定
         // mode: 'dark',  // 全体の背景色
         // nodes: familyNodes,
@@ -109,62 +108,82 @@ const MyFamilyTree = (props) => {
               { type: 'textbox', label: 'History', binding: 'history' }
             ]
         },
-      });
+      })
+    );
+    }, []);
 
-      family.on('render-link', function (sender, args) {
-        if (args.cnode.ppid !== undefined) {
-            args.html += '<use xlink:href="#heart" x="' + args.p.xa + '" y="' + args.p.ya + '"/>';
-        }
-      });
+    useEffect(() => {
+      if(Object.keys(family).length) {
+        console.log('useEffect2',family);
+        family.on('render-link', function (sender, args) {
+          if (args.cnode.ppid !== undefined) {
+              args.html += '<use xlink:href="#heart" x="' + args.p.xa + '" y="' + args.p.ya + '"/>';
+          }
+        });
 
-      family.on('field', function (sender, args) {
-        if (args.name === "bdate") {
-          if (args.data["ddate"]) {
+        family.on('field', function (sender, args) {
+          if (args.name === "bdate") {
+            if (args.data["ddate"]) {
+                const bdate = new Date(args.data["bdate"]);
+                const ddate = new Date(args.data["ddate"]);
+                args.value = bdate.toLocaleDateString() + " - " + ddate.toLocaleDateString();
+            }
+            else {
               const bdate = new Date(args.data["bdate"]);
-              const ddate = new Date(args.data["ddate"]);
-              args.value = bdate.toLocaleDateString() + " - " + ddate.toLocaleDateString();
+              args.value = bdate.toLocaleDateString() + " - ";
+            }
           }
-          else {
-            const bdate = new Date(args.data["bdate"]);
-            args.value = bdate.toLocaleDateString() + " - ";
-          }
+        });
+
+        // localからnode取得しfirebaseに保存
+        // getNodeList = function() {
+        //   const nodeList = family.allGetNode();
+        //   ref.doc("kYkRbtp0nB2oTV9hrAHt").set({
+        //       nodeList
+        //     }, {merge: false})
+        //       .then((docRef) => {
+        //       })
+        //       .catch((error) => {
+        //         alert('保存に失敗しました。')
+        //       });
+        //   return nodeList;
+        // }
+
+        const localStorageNodes = family.getLocalStorageData();
+
+        if(localStorageNodes === null) {
+          console.log('nodes: ', nodes);
+          family.load(nodes);
+        } else {
+          family.load(localStorageNodes);
         }
-      });
-
-      // console.log('nodes', nodes);
-
-      family.load(
-        familyNodes
-      );
-
-      getNodeList = function() {
-        const nodeList = family.allGetNode();
-        ref.doc("kYkRbtp0nB2oTV9hrAHt").set({
-            nodeList
-          }, {merge: false})
-            .then((docRef) => {
-              // console.log('success', docRef.id);
-            })
-            .catch((error) => {
-              // console.log('error', error);
-              alert('保存に失敗しました。')
-            });
-
-
-        // console.log('getNodeList', nodeList);
-        return nodeList;
       }
-    }
+    }, [family])
 
-    return unsubscribe;
+    const clickSave = function() {
+      family.saveLocalStorage();
+      alert('Saveed!');
+    };
 
-    }, [])
+    const clickRemove = function() {
+      localStorage.clear();
+      window.location.reload();
+      alert('Removed!');
+    };
 
   return (
-    <div>
+    <div className="myfamilytree">
       <Navbar />
-      <div style={{height: '100%'}}>
+      <div className="familynode-container">
         <div id="tree" ref={divRef}></div>
+      </div>
+      <div className="save-icon-container" onClick={clickSave}>
+        <span></span>
+        <SdStorageIcon className="save-icon"/>
+      </div>
+      <div className="remove-icon-container" onClick={clickRemove}>
+        <span></span>
+        <DeleteOutlineIcon className="remove-icon" />
       </div>
     </div>
   )

@@ -12,18 +12,17 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-
-import firebase from 'firebase/app';
+// import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import {useNavigate} from 'react-router-dom';
+// import { getNodeList } from '../balkan/MyFamilyTree';
 
-import { getNodeList } from '../balkan/MyFamilyTree';
-
-// const pages = ['Share*', 'Blog*', 'List*'];
 const pages = [];
-// const settings = ['Profile*', 'Account*', 'Dashboard*'];
+// const pages = ['Share*', 'Blog*', 'List*'];
+
 const settings = [];
+// const settings = ['Profile*', 'Account*', 'Dashboard*'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -45,23 +44,29 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
-  const clickLogout = () => {
-    firebase.auth().signOut()
-      .then(() => {
-        navigate('/signin')
-      })
-      .catch(() => {
-        alert('Logout is faled.')
-      });
-  };
+  // Logout function
+  // const clickLogout = () => {
+  //   firebase.auth().signOut()
+  //     .then(() => {
+  //       navigate('/signin')
+  //     })
+  //     .catch(() => {
+  //       alert('Logout is faled.')
+  //     });
+  // };
 
-  const clickSave = () => {
-    const nodeList = getNodeList();
-    // console.log(nodeList);
+  // save function
+  // const clickSave = () => {
+  //   const nodeList = getNodeList();
+  // }
+
+  // Introduction page navigate function
+  const clickIntroduction = () => {
+    navigate('/');
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{background: 'linear-gradient(to right bottom, #222222 0, #22aa22 50%, #222222 100%)',}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -69,6 +74,7 @@ const ResponsiveAppBar = () => {
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+            style={{color: '#5AFF3D',}}
           >
             FamiMap
           </Typography>
@@ -132,7 +138,7 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Aemy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -156,7 +162,7 @@ const ResponsiveAppBar = () => {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
-              {
+              {/* {
                 <MenuItem onClick={clickSave}>
                 <Typography textAlign="center">Save</Typography>
               </MenuItem>
@@ -165,6 +171,11 @@ const ResponsiveAppBar = () => {
                 <MenuItem onClick={clickLogout}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
+              } */}
+              {
+                <MenuItem onClick={clickIntroduction}>
+                  <Typography textAlign="center">Introduction</Typography>
+                </MenuItem>
               }
             </Menu>
           </Box>

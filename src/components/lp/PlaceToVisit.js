@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ImageCard from './ImageCard';
 import places from './places';
 import useWindowPosition from './useWindowPosition';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: '100vh',
@@ -14,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-export default function () {
+
+export default function PlaceToVisit() {
   const classes = useStyles();
   const checked = useWindowPosition('header');
   return (

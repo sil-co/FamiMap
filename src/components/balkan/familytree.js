@@ -170,6 +170,7 @@ FamilyTree._defaultConfig = function (e) {
 };
 
 FamilyTree.prototype.load = function (e) {
+  // console.log('load',e);
   return this.config.nodes = e, this._draw(!1, FamilyTree.action.init), this
 };
 
@@ -516,7 +517,9 @@ FamilyTree.prototype.update = function (e) {
     }
   return this
 };
+
 FamilyTree.prototype.removeNode = function (e, t, i) {
+  console.log('removeNode is called', `e: ${e}`,`t: ${t}`, `i: ${i}`);
   var r = this;
   if (!this.canRemove(e)) return !1;
   var a = this._getNewPidsAndStpidsForIds(e);
@@ -525,6 +528,7 @@ FamilyTree.prototype.removeNode = function (e, t, i) {
     r.config.sticky && FamilyTree._moveToBoundaryArea(r.getSvg(), r.getViewBox(), r.response.boundary), t && t(), FamilyTree.events.publish("removed", [r, e, a])
   })), !0
 };
+
 FamilyTree.prototype.remove = function (e) {
   var t = this.get(e);
   if (t)
@@ -567,6 +571,8 @@ FamilyTree.prototype.get = function (e) {
   return null
 };
 
+// 独自拡張
+// get all node data
 FamilyTree.prototype.allGetNode = function () {
   const allNodes = [];
   for (var t = 0; t < this.config.nodes.length; t++){
@@ -575,10 +581,29 @@ FamilyTree.prototype.allGetNode = function () {
   return allNodes;
 };
 
+// save local storage
+FamilyTree.prototype.saveLocalStorage = function() {
+  const allNodes = JSON.stringify(this.allGetNode());
+  localStorage.setItem('allNodes', allNodes);
+};
+
+// get local storage data
+FamilyTree.prototype.getLocalStorageData = function() {
+  const localStorageNodes = JSON.parse(localStorage.getItem('allNodes'));
+  console.log('localStorageNodes: ',localStorageNodes);
+  return localStorageNodes;
+};
+
+// remove local storage data
+FamilyTree.prototype.removeLocalStorage = function() {
+  localStorage.clear();
+}
+
 FamilyTree.prototype.canRemove = function (e) {
   var t = this.getNode(e);
   return !!t && (!t.hasPartners && !t.hasAssistants)
 };
+
 FamilyTree.prototype.addChildNode = function (e, t, i) {
   this.hideTreeMenu(!1);
   var r = this;
@@ -627,6 +652,7 @@ FamilyTree.prototype.addChildAndPartnerNodes = function (e, t, i, r, a) {
     }
   } else console.error("addChildAndPartnerNodes invalid data")
 };
+
 FamilyTree.prototype.addPartnerNode = function (e, t, i) {
   this.hideTreeMenu(!1);
   var r = this;
@@ -1279,15 +1305,20 @@ FamilyTree.prototype.getMenuButton = function () {
       }))
     }
   }
-}, FamilyTree.menuUI.prototype.hide = function () {
+};
+FamilyTree.menuUI.prototype.hide = function () {
   null != this.wrapper && (this.obj.element.removeChild(this.wrapper), this.wrapper = null)
-}, FamilyTree.menuUI.prototype.on = function (e, t) {
+};
+FamilyTree.menuUI.prototype.on = function (e, t) {
   return FamilyTree.events.on(e, t, this._event_id), this
-}, FamilyTree.circleMenuUI = function () {}, FamilyTree.circleMenuUI.prototype.init = function (e, t) {
+};
+FamilyTree.circleMenuUI = function () {}, FamilyTree.circleMenuUI.prototype.init = function (e, t) {
   this.obj = e, this.menu = t, this._menu = null, this._buttonsInterval = [], this._linesInterval = [], this._event_id = FamilyTree._guid()
-}, FamilyTree.circleMenuUI.prototype.show = function (e, t) {
+};
+FamilyTree.circleMenuUI.prototype.show = function (e, t) {
   this._show(e, t)
-}, FamilyTree.circleMenuUI.prototype._show = function (e, t) {
+};
+FamilyTree.circleMenuUI.prototype._show = function (e, t) {
   var i = this,
     r = this.obj.getNode(e),
     a = FamilyTree.t(r.templateName, r.min, this.obj.getScale());
@@ -1388,7 +1419,9 @@ FamilyTree.prototype.getMenuButton = function () {
       }, 500, FamilyTree.anim.inOutSin))
     } else this.hide()
   }
-}, FamilyTree.circleMenuUI.prototype.hide = function () {
+};
+
+FamilyTree.circleMenuUI.prototype.hide = function () {
   for (var e = this._buttonsInterval.length - 1; e >= 0; e--) clearInterval(this._buttonsInterval[e]), this._buttonsInterval.splice(e, 1);
   this._buttonsInterval = [];
   for (e = this._linesInterval.length - 1; e >= 0; e--) clearInterval(this._linesInterval[e]), this._linesInterval.splice(e, 1);
@@ -1401,7 +1434,9 @@ FamilyTree.prototype.getMenuButton = function () {
       n = this.obj.element.querySelector("[" + FamilyTree.attr.control_node_circle_menu_id + '="' + i + '"]').querySelectorAll("line");
     n[0].setAttribute("x1", -a.nodeCircleMenuButton.radius / 2), n[0].setAttribute("x2", a.nodeCircleMenuButton.radius / 2), n[0].setAttribute("y1", -6), n[0].setAttribute("y2", -6), n[1].setAttribute("x1", -a.nodeCircleMenuButton.radius / 2), n[1].setAttribute("x2", a.nodeCircleMenuButton.radius / 2), n[1].setAttribute("y1", 0), n[1].setAttribute("y2", 0), n[2].setAttribute("x1", -a.nodeCircleMenuButton.radius / 2), n[2].setAttribute("x2", a.nodeCircleMenuButton.radius / 2), n[2].setAttribute("y1", 6), n[2].setAttribute("y2", 6), t.parentElement.removeChild(t), t = null
   }
-}, FamilyTree.circleMenuUI.prototype.on = function (e, t) {
+};
+
+FamilyTree.circleMenuUI.prototype.on = function (e, t) {
   return FamilyTree.events.on(e, t, this._event_id), this
 }, void 0 === FamilyTree && (FamilyTree = {}), FamilyTree.idb = {
   version: 1,
@@ -1472,14 +1507,34 @@ FamilyTree.prototype.getMenuButton = function () {
       }
     } else t && t(!1)
   }))
-}, FamilyTree.toolbarUI = function () {}, FamilyTree.toolbarUI.expandAllIcon = '<svg style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#757575" /></marker><line x1="11" y1="11" x2="6" y2="6" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><line x1="21" y1="11" x2="26" y2="6" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><line x1="21" y1="21" x2="26" y2="26" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><line x1="11" y1="21" x2="6" y2="26" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><rect x="12" y="12" width="8" height="8" fill="#757575"></rect></svg>', FamilyTree.toolbarUI.fitIcon = '<svg  style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M4,11 L4,4 L11,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,11 L28,4 L21,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,21 L28,28 L21,28"></path><path stroke-width="3" fill="none" stroke="#757575" d="M4,21 L4,28 L11,28"></path><circle cx="16" cy="16" r="5" fill="#757575"></circle></svg>', FamilyTree.toolbarUI.openFullScreenIcon = '<svg  style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M4,11 L4,4 L11,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,11 L28,4 L21,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,21 L28,28 L21,28"></path><path stroke-width="3" fill="none" stroke="#757575" d="M4,21 L4,28 L11,28"></path><line x1="5" y1="5" x2="27" y2="27" stroke-width="3" stroke="#757575"></line><line x1="5" y1="27" x2="27" y2="5" stroke-width="3" stroke="#757575"></line></svg>', FamilyTree.toolbarUI.closeFullScreenIcon = '<svg  style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M4,11 L4,4 L11,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,11 L28,4 L21,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,21 L28,28 L21,28"></path><path stroke-width="3" fill="none" stroke="#757575" d="M4,21 L4,28 L11,28"></path><rect x="11" y="11" width="10" height="10" stroke-width="3" fill="none" stroke="#757575" ></rect></svg>', FamilyTree.toolbarUI.zoomInIcon = '<svg style="box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border-left: 1px solid #cacaca; border-right: 1px solid #cacaca; border-top: 1px solid #cacaca; background-color: #f9f9f9;display: block; cursor: pointer;" width="32px" height="32px" ><g><rect fill="#f9f9f9" x="0" y="0" width="32" height="32" ></rect><line x1="8" y1="16" x2="24" y2="16" stroke-width="3" stroke="#757575"></line><line x1="16" y1="8" x2="16" y2="24" stroke-width="3" stroke="#757575"></line></g><line x1="4" y1="32" x2="28" y2="32" stroke-width="1" stroke="#cacaca"></line></svg>', FamilyTree.toolbarUI.zoomOutIcon = '<svg style="box-shadow: 0px 1px 4px rgba(0,0,0,0.3); margin-bottom:7px; border-left: 1px solid #cacaca; border-right: 1px solid #cacaca; border-bottom: 1px solid #cacaca; background-color: #f9f9f9;display: block; cursor: pointer;" width="32px" height="32px" ><g><rect fill="#f9f9f9" x="0" y="0" width="32" height="32" ></rect><line x1="8" y1="16" x2="24" y2="16" stroke-width="3" stroke="#757575"></line></g></svg>', FamilyTree.toolbarUI.layoutIcon = "<svg " + FamilyTree.attr.tlbr + '="layout" style="box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M8,24 L16,14 L24,24"></path><path stroke-width="3" fill="none" stroke="#757575" d="M8,16 L16,8 L24,16"></path></svg>', FamilyTree.toolbarUI.prototype.init = function (e, t) {
+}, FamilyTree.toolbarUI = function () {};
+
+FamilyTree.toolbarUI.expandAllIcon =
+  '<svg style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#757575" /></marker><line x1="11" y1="11" x2="6" y2="6" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><line x1="21" y1="11" x2="26" y2="6" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><line x1="21" y1="21" x2="26" y2="26" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><line x1="11" y1="21" x2="6" y2="26" stroke="#757575" stroke-width="2" marker-end="url(#arrow)" /><rect x="12" y="12" width="8" height="8" fill="#757575"></rect></svg>';
+
+FamilyTree.toolbarUI.fitIcon = '<svg  style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M4,11 L4,4 L11,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,11 L28,4 L21,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,21 L28,28 L21,28"></path><path stroke-width="3" fill="none" stroke="#757575" d="M4,21 L4,28 L11,28"></path><circle cx="16" cy="16" r="5" fill="#757575"></circle></svg>';
+ FamilyTree.toolbarUI.openFullScreenIcon = '<svg  style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M4,11 L4,4 L11,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,11 L28,4 L21,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,21 L28,28 L21,28"></path><path stroke-width="3" fill="none" stroke="#757575" d="M4,21 L4,28 L11,28"></path><line x1="5" y1="5" x2="27" y2="27" stroke-width="3" stroke="#757575"></line><line x1="5" y1="27" x2="27" y2="5" stroke-width="3" stroke="#757575"></line></svg>';
+ FamilyTree.toolbarUI.closeFullScreenIcon = '<svg  style="margin-bottom:7px;box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M4,11 L4,4 L11,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,11 L28,4 L21,4"></path><path stroke-width="3" fill="none" stroke="#757575" d="M28,21 L28,28 L21,28"></path><path stroke-width="3" fill="none" stroke="#757575" d="M4,21 L4,28 L11,28"></path><rect x="11" y="11" width="10" height="10" stroke-width="3" fill="none" stroke="#757575" ></rect></svg>';
+ FamilyTree.toolbarUI.zoomInIcon = '<svg style="box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border-left: 1px solid #cacaca; border-right: 1px solid #cacaca; border-top: 1px solid #cacaca; background-color: #f9f9f9;display: block; cursor: pointer;" width="32px" height="32px" ><g><rect fill="#f9f9f9" x="0" y="0" width="32" height="32" ></rect><line x1="8" y1="16" x2="24" y2="16" stroke-width="3" stroke="#757575"></line><line x1="16" y1="8" x2="16" y2="24" stroke-width="3" stroke="#757575"></line></g><line x1="4" y1="32" x2="28" y2="32" stroke-width="1" stroke="#cacaca"></line></svg>';
+ FamilyTree.toolbarUI.zoomOutIcon = '<svg style="box-shadow: 0px 1px 4px rgba(0,0,0,0.3); margin-bottom:7px; border-left: 1px solid #cacaca; border-right: 1px solid #cacaca; border-bottom: 1px solid #cacaca; background-color: #f9f9f9;display: block; cursor: pointer;" width="32px" height="32px" ><g><rect fill="#f9f9f9" x="0" y="0" width="32" height="32" ></rect><line x1="8" y1="16" x2="24" y2="16" stroke-width="3" stroke="#757575"></line></g></svg>';
+ FamilyTree.toolbarUI.layoutIcon = "<svg " + FamilyTree.attr.tlbr + '="layout" style="box-shadow: 0px 1px 4px rgba(0,0,0,0.3); border: 1px solid #cacaca;background-color: #f9f9f9;display: block;cursor: pointer;" width="32px" height="32px"><path stroke-width="3" fill="none" stroke="#757575" d="M8,24 L16,14 L24,24"></path><path stroke-width="3" fill="none" stroke="#757575" d="M8,16 L16,8 L24,16"></path></svg>';
+ FamilyTree.toolbarUI.prototype.init = function (e, t) {
   if (t) {
-    this.obj = e, this.toolbar = t, this._visible = !1, this.div = document.createElement("div"), this.div.classList.add("bft-toolbar-container"), Object.assign(this.div.style, {
+    this.obj = e;
+    this.toolbar = t;
+    this._visible = !1;
+    this.div = document.createElement("div");
+    this.div.classList.add("bft-toolbar-container");
+    Object.assign(this.div.style, {
       position: "absolute",
       padding: "3px",
       right: this.obj.config.padding - 10 + "px",
       bottom: this.obj.config.padding - 10 + "px"
-    }), t.expandAll && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="expand">' + FamilyTree.toolbarUI.expandAllIcon + "</div>"), t.fit && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="fit">' + FamilyTree.toolbarUI.fitIcon + "</div>"), t.zoom && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="plus">' + FamilyTree.toolbarUI.zoomInIcon + "</div>", this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="minus">' + FamilyTree.toolbarUI.zoomOutIcon + "</div>"), t.layout && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="layout">' + FamilyTree.toolbarUI.layoutIcon + "</div>", this.layouts = document.createElement("div"), this.layouts.innerHTML = "<svg " + FamilyTree.attr.layout + '="normal" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="7" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="63" y="41" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="35" stroke-width="1"></line><line stroke="#000000" x1="32" x2="88" y1="35" y2="35" stroke-width="1"></line><line stroke="#000000" x1="32" x2="32" y1="35" y2="41" stroke-width="1"></line><line stroke="#000000" x1="88" x2="88" y1="35" y2="41" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="treeRightOffset" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="40" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="40" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="35" stroke-width="1"></line><line stroke="#000000" x1="60" x2="35" y1="35" y2="35" stroke-width="1"></line><line stroke="#000000" x1="35" x2="35" y1="35" y2="86" stroke-width="1"></line><line stroke="#000000" x1="35" x2="40" y1="86" y2="86" stroke-width="1"></line><line stroke="#000000" x1="35" x2="40" y1="54" y2="54" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="treeLeftOffset" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="30" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="30" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="35" stroke-width="1"></line><line stroke="#000000" x1="60" x2="85" y1="35" y2="35" stroke-width="1"></line><line stroke="#000000" x1="85" x2="85" y1="35" y2="86" stroke-width="1"></line><line stroke="#000000" x1="80" x2="85" y1="86" y2="86" stroke-width="1"></line><line stroke="#000000" x1="80" x2="85" y1="54" y2="54" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="mixed" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="35" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="35" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="41" stroke-width="1"></line><line stroke="#000000" x1="60" x2="60" y1="68" y2="73" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="tree" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="7" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="7" y="73" width="50" height="27"></rect><rect fill="#F57C00" x="63" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="63" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="86" stroke-width="1"></line><line stroke="#000000" x1="57" x2="63" y1="54" y2="54" stroke-width="1"></line><line stroke="#000000" x1="57" x2="63" y1="86" y2="86" stroke-width="1"></line></svg>', this.obj.element.appendChild(this.layouts), Object.assign(this.layouts.style, {
+    });
+    t.expandAll && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="expand">' + FamilyTree.toolbarUI.expandAllIcon + "</div>");
+    t.fit && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="fit">' + FamilyTree.toolbarUI.fitIcon + "</div>");
+    t.zoom && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="plus">' + FamilyTree.toolbarUI.zoomInIcon + "</div>", this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="minus">' + FamilyTree.toolbarUI.zoomOutIcon + "</div>");
+    t.layout && (this.div.innerHTML += "<div " + FamilyTree.attr.tlbr + '="layout">' + FamilyTree.toolbarUI.layoutIcon + "</div>", this.layouts = document.createElement("div"), this.layouts.innerHTML = "<svg " + FamilyTree.attr.layout + '="normal" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="7" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="63" y="41" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="35" stroke-width="1"></line><line stroke="#000000" x1="32" x2="88" y1="35" y2="35" stroke-width="1"></line><line stroke="#000000" x1="32" x2="32" y1="35" y2="41" stroke-width="1"></line><line stroke="#000000" x1="88" x2="88" y1="35" y2="41" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="treeRightOffset" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="40" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="40" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="35" stroke-width="1"></line><line stroke="#000000" x1="60" x2="35" y1="35" y2="35" stroke-width="1"></line><line stroke="#000000" x1="35" x2="35" y1="35" y2="86" stroke-width="1"></line><line stroke="#000000" x1="35" x2="40" y1="86" y2="86" stroke-width="1"></line><line stroke="#000000" x1="35" x2="40" y1="54" y2="54" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="treeLeftOffset" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="30" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="30" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="35" stroke-width="1"></line><line stroke="#000000" x1="60" x2="85" y1="35" y2="35" stroke-width="1"></line><line stroke="#000000" x1="85" x2="85" y1="35" y2="86" stroke-width="1"></line><line stroke="#000000" x1="80" x2="85" y1="86" y2="86" stroke-width="1"></line><line stroke="#000000" x1="80" x2="85" y1="54" y2="54" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="mixed" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="35" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="35" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="41" stroke-width="1"></line><line stroke="#000000" x1="60" x2="60" y1="68" y2="73" stroke-width="1"></line></svg><svg ' + FamilyTree.attr.layout + '="tree" style="cursor: pointer;" width="110" height="100"><rect fill="#039BE5" x="35" y="0" width="50" height="27"></rect><rect fill="#F57C00" x="7" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="7" y="73" width="50" height="27"></rect><rect fill="#F57C00" x="63" y="41" width="50" height="27"></rect><rect fill="#F57C00" x="63" y="73" width="50" height="27"></rect><line stroke="#000000" x1="60" x2="60" y1="27" y2="86" stroke-width="1"></line><line stroke="#000000" x1="57" x2="63" y1="54" y2="54" stroke-width="1"></line><line stroke="#000000" x1="57" x2="63" y1="86" y2="86" stroke-width="1"></line></svg>', this.obj.element.appendChild(this.layouts), Object.assign(this.layouts.style, {
       position: "absolute",
       width: "100%",
       left: "0",
