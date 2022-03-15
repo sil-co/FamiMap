@@ -1,7 +1,7 @@
 import RoutesList from './components/routes/RoutesList';
 // import {AuthProvider} from './components/auth/AuthContext';
 
-require('firebase/firestore');
+// require('firebase/firestore');
 
 function App(props) {
 
